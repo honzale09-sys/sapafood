@@ -1,0 +1,1690 @@
+{
+ "categories": [
+  {
+   "name_cz": "Předkrmy",
+   "name_en": "Starters",
+   "items": [
+    {
+     "number": "11",
+     "name": "Smažené závitky 4ks",
+     "name_en": "Smažené závitky 4pcs",
+     "desc_cz": "Kedluben, mrkev, jidášovo ucho, cibule, shiitake houby, skleněné nudle, vepřové maso",
+     "desc_en": "Kohlrabi, carrot, auricularia auricula-judae, onion, shiitake mushroom, glass noodles, pork",
+     "price": 119,
+     "allergens": [
+      4,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/8.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "8"
+    },
+    {
+     "number": "12",
+     "name": "Čerstvé závitky 3ks",
+     "name_en": "Čerstvé závitky 3pcs",
+     "desc_cz": "Rýžové nudle, salát, okurka, koriandr,mango, vejce, krevety",
+     "desc_en": "Rice noodles, lettuce, cucumber, coriander, mango, eggs, shrimp",
+     "price": 199,
+     "allergens": [
+      2,
+      3,
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/9.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "9"
+    },
+    {
+     "number": "13",
+     "name": "Po Ped 2ks",
+     "name_en": "Po Ped 2pcs",
+     "desc_cz": "Kachna, rýžové nudle, salát, okurka, mrkev, mango",
+     "desc_en": "Duck, rice noodles, lettuce, cucumber, carrot, mango",
+     "price": 119,
+     "allergens": [
+      5
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/10.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "10"
+    },
+    {
+     "number": "14",
+     "name": "Popla 2ks",
+     "name_en": "Popla 2pcs",
+     "desc_cz": "Uzený losos, rýžové nudle, salát, mrkev, okurka, avokádo, kopr",
+     "desc_en": "Smoked salmon, rice noodles, salad, carrot, cucumber, avocado, dill",
+     "price": 139,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/11.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "11"
+    },
+    {
+     "number": "15",
+     "name": "Po Jea 2ks",
+     "name_en": "Po jea 2pcs",
+     "desc_cz": "Tofu, rýžové nudle, salát, okurka, mrkev, chilli prášek, mango, Thajská bazalka",
+     "desc_en": "Tofu, rice noodles, lettuce, cucumber, carrot, chili powder, mango, Thai basil",
+     "price": 99,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/104.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "104"
+    },
+    {
+     "number": "16",
+     "name": "Smažené krevety 5ks",
+     "name_en": "Fried shrimps (5pcs)",
+     "desc_cz": "Smažené krevety se sladkokyselou omáčkou",
+     "desc_en": "Fried shrimps with sweet-sour sauce",
+     "price": 169,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/318.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "318"
+    }
+   ]
+  },
+  {
+   "name_cz": "Polévky",
+   "name_en": "Soups",
+   "items": [
+    {
+     "number": "20",
+     "name": "Kyselopikantní polévka",
+     "name_en": "",
+     "desc_cz": "Kuřecí, bambus, mrkev, cibule, shiitake houby, houba",
+     "desc_en": "Chicken, bamboo, carrot, onion, shiitake mushrooms, mushroom",
+     "price": 69,
+     "allergens": [
+      3,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/17.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "17"
+    },
+    {
+     "number": "21",
+     "name": "Tom DZ",
+     "name_en": "Tom Dz",
+     "desc_cz": "Mořská řasa, skleněné nudle, tofu, shiitake houby, suchá cibule , mrkev, celer",
+     "desc_en": "Seaweed, glass noodles, tofu, shiitake mushrooms, dry onions, carrots, celery",
+     "price": 79,
+     "allergens": [
+      9
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/16.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "16"
+    },
+    {
+     "number": "22",
+     "name": "Kuřecí polévka",
+     "name_en": "Chicken Soup",
+     "desc_cz": "Kuřecí vývar, kuřecí, skleněné nudle, shiitake houby, jarní cibulka, koriandr, pepř",
+     "desc_en": "Chicken broth, chicken, glass noodles, shiitake mushrooms, spring onions, coriander, pepper",
+     "price": 99,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/13.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "13"
+    },
+    {
+     "number": "23",
+     "name": "Tom Kha",
+     "name_en": "",
+     "desc_cz": "Kuřecí vývar, kokosové mléko, rajčata, červená fazole, galangal, citronová tráva, citronový list, cibule,",
+     "desc_en": "Chicken broth, coconut milk, tomatoes, red beans, galangal, lemon grass, lemon leaf, onion,",
+     "price": null,
+     "allergens": [],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 129,
+       "allergens": [
+        2,
+        4
+       ]
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 109,
+       "allergens": [
+        4
+       ]
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 99,
+       "allergens": [
+        4
+       ]
+      }
+     ],
+     "image": "/api/static/scraped/food/14.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "14"
+    }
+   ]
+  },
+  {
+   "name_cz": "Saláty",
+   "name_en": "Salads",
+   "items": [
+    {
+     "number": "31",
+     "name": "Larb Kai",
+     "name_en": "",
+     "desc_cz": "Kuřecí, galangal, citronová tráva, salát, cibule šalotka, citronový list, máta, koriandr, chilli, okurka, syntetické koření",
+     "desc_en": "Chicken, galangal, lemon grass, lettuce, shallot onion, lemon leaf, mint, coriander, chili, cucumber, synthetic spices",
+     "price": 189,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/20.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "20"
+    },
+    {
+     "number": "32",
+     "name": "Krevotovo-mangový salát",
+     "name_en": "Krevetovo-mangový salát",
+     "desc_cz": "Krevety 5ks, mango, mrkev, kešu, cibule šalotka, máta, koriandr, dresink",
+     "desc_en": "Shrimp 5pcs, mango, carrot, cashews, shallot onion, mint, coriander, dressing",
+     "price": 219,
+     "allergens": [
+      2,
+      4,
+      5,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/19.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "19"
+    },
+    {
+     "number": "33",
+     "name": "Nam Tok Ped",
+     "name_en": "",
+     "desc_cz": "Kachna, galangal, citronová tráva, citronový list, cibule šalotka, máta, koriandr, mango, mrkev, kešu, chili prášek, chili olej, dresink",
+     "desc_en": "Duck, galangal, lemon grass, lemon leaf, shallot onion, mint, coriander, mango, carrot, cashew, chili powder, chili oil, dressing",
+     "price": 239,
+     "allergens": [
+      4,
+      5
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/26.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "26"
+    }
+   ]
+  },
+  {
+   "name_cz": "Pho, bún & nudle",
+   "name_en": "Pho, bún & noodles",
+   "items": [
+    {
+     "number": "40",
+     "name": "Pho Bo",
+     "name_en": "",
+     "desc_cz": "Rýžové nudle, hovězí maso, jarní cibulka, koriandr, cibule",
+     "desc_en": "Rice noodles, beef, spring onion, coriander, onion",
+     "price": 219,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/27.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "27"
+    },
+    {
+     "number": "41",
+     "name": "Pho Ga",
+     "name_en": "",
+     "desc_cz": "Rýžové nudle, kuřecí maso, jarní cibulka, koriandr, cibule",
+     "desc_en": "Rice noodles, chicken, spring onion, coriander, onion",
+     "price": 219,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "28"
+    },
+    {
+     "number": "42",
+     "name": "Pho Kari",
+     "name_en": "",
+     "desc_cz": "Polévka kari, pho nudle, kokosové mléko, houby, cuketa, mrkev, paprika, brokolice, klíčky mungo, jarní cibulka, koriandr",
+     "desc_en": "Curry soup, pho noodles, coconut milk, mushrooms, zucchini, carrots, peppers, broccoli, mungo sprouts, spring onion, coriander",
+     "price": null,
+     "allergens": [
+      4,
+      7
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 239,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 209,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/128.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "128"
+    },
+    {
+     "number": "43",
+     "name": "Bun Nem",
+     "name_en": "",
+     "desc_cz": "Smažené závitky 6ks, rýžové nudle, salát, perilla, koriandr, omáčka",
+     "desc_en": "Fried rolls 6pcs, rice noodles, salad, perilla, coriander, sauce",
+     "price": 219,
+     "allergens": [
+      4,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/236.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "236"
+    },
+    {
+     "number": "44",
+     "name": "Bun Nam Bo",
+     "name_en": "Bun Bo Nam Bo",
+     "desc_cz": "Hovězí,/ kureci/ tofu ,  rýžové nudle, salát, kedluben, mrkev, klíčky mungo, arašídy, cibule, koriandr, omáčka",
+     "desc_en": "Beef, / chicken/ tofu.  rice noodles, salad, kohlrabi, carrots, mung sprouts, peanuts, onions, coriander, sauce",
+     "price": null,
+     "allergens": [
+      4,
+      5,
+      6,
+      12
+     ],
+     "variants": [
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 209,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 199,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/30.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "30"
+    },
+    {
+     "number": "45",
+     "name": "Bun Cha (Grilované vepřové)",
+     "name_en": "Bun Cha (Grilled pork)",
+     "desc_cz": "Rýžové nudle, salát, perilla, grilované vepřové maso, koriandr, kedluben, mrkev, omáčka",
+     "desc_en": "Rice noodles, salad, perilla, grilled pork meat, coriander, kohlrabi, carrots, sauce",
+     "price": 239,
+     "allergens": [
+      4,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/31.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "31"
+    },
+    {
+     "number": "46",
+     "name": "Bun Ngan (Grilovaná kachna)",
+     "name_en": "Bun Ngan (Grilled duck)",
+     "desc_cz": "Rýžové nudle, grilovaná kachna, salát, sojová omáčka, sezam.",
+     "desc_en": "Rice noodles, grilled duck, salad, soy sauce, sesame.",
+     "price": 249,
+     "allergens": [
+      1,
+      2,
+      6,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/32.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "32"
+    },
+    {
+     "number": "47",
+     "name": "Pad Thai",
+     "name_en": "",
+     "desc_cz": "Pho nudle, klíčky mungo, porek, mrkev, arašídy, vejce, tamarindová omáčka",
+     "desc_en": "Pho noodles, mung sprouts, leek, carrots, peanuts, eggs, tamarind sauce",
+     "price": null,
+     "allergens": [],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 239,
+       "allergens": [
+        2,
+        3,
+        5,
+        6,
+        11,
+        12
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 219,
+       "allergens": [
+        2,
+        3,
+        5,
+        6,
+        11,
+        12
+       ]
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 209,
+       "allergens": [
+        3,
+        5,
+        6,
+        11,
+        12
+       ]
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 199,
+       "allergens": [
+        2,
+        3,
+        5,
+        6,
+        11,
+        12
+       ]
+      }
+     ],
+     "image": "/api/static/scraped/food/35.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "35"
+    },
+    {
+     "number": "48",
+     "name": "Smažené Nudle",
+     "name_en": "Fried Noodles",
+     "desc_cz": "Smažené nudle, klíčky mungo, porek, mrkev, vejce, cibule cucho, omáčka",
+     "desc_en": "Fried noodles, soy sprouts, leek, carrots, eggs, onion cucho, sauce",
+     "price": null,
+     "allergens": [
+      1,
+      3,
+      4,
+      6
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 209,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 199,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 189,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/210.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "210"
+    },
+    {
+     "number": "49",
+     "name": "Smažené Rýžové Nudle",
+     "name_en": "Fried Rice Noodles",
+     "desc_cz": "Smažené rýžové nudle, klíčky mungo, porek, mrkev, vejce, cibule cucho",
+     "desc_en": "Fried rice noodles, mung sprouts, porek, carrot, egg, onion cucho",
+     "price": null,
+     "allergens": [
+      3,
+      4
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 209,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 199,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 189,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/221.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "221"
+    },
+    {
+     "number": "50",
+     "name": "Skleněné Nudle",
+     "name_en": "Skleněné nudle",
+     "desc_cz": "Smažené skleněné nudle, klíčky mungo, porek, mrkev, vejce, cibule cucho",
+     "desc_en": "Fried glass noodle, say sprouts, leek, carrots, eggs, onion cucho",
+     "price": null,
+     "allergens": [
+      3,
+      4
+     ],
+     "variants": [
+      {
+       "label_cz": "Mořské plody",
+       "label_en": "",
+       "price": 229,
+       "allergens": [
+        2,
+        14
+       ]
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 229,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 209,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 199,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/222.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "222"
+    },
+    {
+     "number": "51",
+     "name": "Coconuf Udon",
+     "name_en": "",
+     "desc_cz": "Udon nudle, kokosové mléko, shiitake houby, žampiony, hořčice, klíčky mungo, fialová cibule",
+     "desc_en": "Udon noodles, coconut milk, shiitake mushrooms, mushrooms, mustard, mungo sprouts, purple onion",
+     "price": null,
+     "allergens": [
+      1,
+      4,
+      6,
+      7,
+      10
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 249,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 209,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/59.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "59"
+    },
+    {
+     "number": "52",
+     "name": "Red Udon",
+     "name_en": "",
+     "desc_cz": "Udon nudle, kokosové mléko, chilli, cuketa, cibule, klíčky mungo",
+     "desc_en": "Udon noodles, coconut milk, chili, zucchini, onions, mung sprouts",
+     "price": null,
+     "allergens": [],
+     "variants": [
+      {
+       "label_cz": "Sépie",
+       "label_en": "Squid",
+       "price": 259,
+       "allergens": [
+        4,
+        14
+       ]
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 259,
+       "allergens": [
+        4,
+        14
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 239,
+       "allergens": [
+        4,
+        14
+       ]
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 229,
+       "allergens": [
+        4,
+        14
+       ]
+      }
+     ],
+     "image": "/api/static/scraped/food/56.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "56"
+    }
+   ]
+  },
+  {
+   "name_cz": "Rýže & křupavé speciality",
+   "name_en": "Rice & crispy specialities",
+   "items": [
+    {
+     "number": "60",
+     "name": "Rizoto",
+     "name_en": "Risotto",
+     "desc_cz": "Vietnamská smažená rýže s masem nebo tofu a zeleninou",
+     "desc_en": "Vietnamese fried rice with meat or tofu and vegetables",
+     "price": null,
+     "allergens": [
+      3,
+      4
+     ],
+     "variants": [
+      {
+       "label_cz": "Mořské plody",
+       "label_en": "",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 209,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 199,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 189,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/204.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "204"
+    },
+    {
+     "number": "61",
+     "name": "Com Ga 23",
+     "name_en": "Com Ga",
+     "desc_cz": "Grilovaná kuřecí prsa, grilované krevety se smaženou rýží, pak choi a omáčka",
+     "desc_en": "Grilled chicken breast, grilled shrimps with fried rice, bok choy and sauce",
+     "price": 249,
+     "allergens": [
+      2
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/208.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "208"
+    },
+    {
+     "number": "62",
+     "name": "Kao Kuk Krapi",
+     "name_en": "",
+     "desc_cz": "Pálivá retovaná rýže s masem na sladko, zázvor, mango, kešu, oříšky, hrášek, vajíčka a krevetová pasta",
+     "desc_en": "Hot roasted rice with sweet meat, bolt, mango, cashews, nuts, peas, egg and shrimp paste",
+     "price": null,
+     "allergens": [
+      2,
+      3,
+      4,
+      11
+     ],
+     "variants": [
+      {
+       "label_cz": "Mořské plody",
+       "label_en": "",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 219,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/43.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "43"
+    },
+    {
+     "number": "63",
+     "name": "Khao Mok Talay",
+     "name_en": "",
+     "desc_cz": "Smažená rýže, sépie, krevety, mušle, máslo, vejce, žluté kari, hrozny, mrkev, cibule",
+     "desc_en": "Fried rice, cuttlefish, shrimp, mussels, butter, eggs, yellow curry, grapes, carrots, onions,",
+     "price": 289,
+     "allergens": [
+      2,
+      3,
+      4,
+      8,
+      14
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/44.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "44"
+    },
+    {
+     "number": "64",
+     "name": "Smažená kuřecí prsa",
+     "name_en": "",
+     "desc_cz": "Smažená kuřecí prsa a hranolky",
+     "desc_en": "Fried chicken breast and french fries",
+     "price": null,
+     "allergens": [
+      1,
+      11
+     ],
+     "variants": [
+      {
+       "label_cz": "Smažená kuřecí prsa s tamarindovou omáčkou",
+       "label_en": "",
+       "price": 199,
+       "allergens": []
+      },
+      {
+       "label_cz": "Smažená kuřecí prsa s korejskou pikantní omáčkou",
+       "label_en": "",
+       "price": 199,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/309.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "309"
+    },
+    {
+     "number": "65",
+     "name": "Křupavé Smažené Kuřecí Stehno",
+     "name_en": "",
+     "desc_cz": "křupavé smažené kuřecí stehno,brokolice, cuketa, paprika, mrkev, cibule, fazole a rýže",
+     "desc_en": "",
+     "price": null,
+     "allergens": [
+      1,
+      4
+     ],
+     "variants": [
+      {
+       "label_cz": "Thajská chilli omáčka",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "se sladkokyselou omáčkou",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "s arašídovou omáčkou",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Pepřová omáčka",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Thajská bylinková omáčka",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/310.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "310"
+    },
+    {
+     "number": "66",
+     "name": "Křupavá Smažená Kachna",
+     "name_en": "",
+     "desc_cz": "Křupavá smažená kachna ,brokolice, cuketa, paprika, mrkev, cibule, fazole a rýže",
+     "desc_en": "",
+     "price": null,
+     "allergens": [
+      1,
+      4,
+      14
+     ],
+     "variants": [
+      {
+       "label_cz": "Thajská chilli omáčka",
+       "label_en": "",
+       "price": 259,
+       "allergens": []
+      },
+      {
+       "label_cz": "se sladkokyselou omáčkou",
+       "label_en": "",
+       "price": 259,
+       "allergens": []
+      },
+      {
+       "label_cz": "s arašídovou omáčkou",
+       "label_en": "",
+       "price": 259,
+       "allergens": []
+      },
+      {
+       "label_cz": "Pepřová omáčka",
+       "label_en": "",
+       "price": 259,
+       "allergens": []
+      },
+      {
+       "label_cz": "Thajská bylinková omáčka",
+       "label_en": "",
+       "price": 259,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/311.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "311"
+    }
+   ]
+  },
+  {
+   "name_cz": "Z woku",
+   "name_en": "From the wok",
+   "items": [
+    {
+     "number": "70",
+     "name": "Kung Pao",
+     "name_en": "",
+     "desc_cz": "Restované maso / tofu se zeleninou na sladkokyselé omáčce a rýže",
+     "desc_en": "Sautéed meat / tofu with vegetables on sweet and sour sauce and rice",
+     "price": null,
+     "allergens": [
+      4,
+      5,
+      6
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 239,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Vepřové",
+       "label_en": "",
+       "price": 219,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 209,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/312.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "312"
+    },
+    {
+     "number": "71",
+     "name": "Xao Sa Ot",
+     "name_en": "",
+     "desc_cz": "Restované maso nebo tofu s citronovou trávou, chilli a zelenina, rýže",
+     "desc_en": "Sautéed meat or tofu with lemongrass, chilli and vegetables, rice",
+     "price": null,
+     "allergens": [
+      4
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 249,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Vepřové",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 219,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/313.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "313"
+    },
+    {
+     "number": "72",
+     "name": "Xao Mang Tay",
+     "name_en": "",
+     "desc_cz": "Restované maso nebo tofu s chřestem a zeleninou, rýže",
+     "desc_en": "Sautéed meat or tofu with asparagus and vegetables, rice",
+     "price": null,
+     "allergens": [],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 249,
+       "allergens": []
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Vepřové",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 219,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/295.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "295"
+    },
+    {
+     "number": "73",
+     "name": "Pad Kra Bao",
+     "name_en": "",
+     "desc_cz": "Restované kousky masa nebo tofu, lilek, mrkev, česnek, cibule, thajská bazalka v palivé sojové omáčce a rýže",
+     "desc_en": "Sauteed pieces of meat or tofu with eggplant, carrots, garlic, onions, and Thai basil in soy  sauce and rice",
+     "price": null,
+     "allergens": [
+      4,
+      6
+     ],
+     "variants": [
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 249,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Vepřové",
+       "label_en": "",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 229,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 219,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/53.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "53"
+    },
+    {
+     "number": "74",
+     "name": "Beef Sezam",
+     "name_en": "BEEF SEZAM",
+     "desc_cz": "Restované hovezí s brokolicí, cibulí, cuketou, sezamové semínky, chilli a rýže",
+     "desc_en": "sautéed beef with vegetables, sesame seeds and rice",
+     "price": 239,
+     "allergens": [
+      4,
+      11
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/296.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "296"
+    },
+    {
+     "number": "75",
+     "name": "Bo Xao Luc Lac",
+     "name_en": "",
+     "desc_cz": "Restované hovězí s brokolicí, cibulí, cuketou, paprikou, a brambory",
+     "desc_en": "Roasted beef with broccoli, onion, zucchini, peppers, and potatoes",
+     "price": 279,
+     "allergens": [
+      4
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/314.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "314"
+    }
+   ]
+  },
+  {
+   "name_cz": "Kari",
+   "name_en": "Curries",
+   "items": [
+    {
+     "number": "80",
+     "name": "Žluté Kari",
+     "name_en": "Yellow Curry",
+     "desc_cz": "Žluté kari s kokosovým mlékem, zeleninou, mrkví, lilkem, brokolicí, červenou paprikou, cibulí, bambusem, a rýží",
+     "desc_en": "Yellow curry with coconut milk, vegetables, carrots, eggplant, broccoli, red pepper, onion, bamboo, and rice",
+     "price": null,
+     "allergens": [
+      4,
+      7
+     ],
+     "variants": [
+      {
+       "label_cz": "Kachna",
+       "label_en": "Duck",
+       "price": 279,
+       "allergens": []
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 269,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 249,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 229,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/212.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "212"
+    },
+    {
+     "number": "81",
+     "name": "Zelené Kari",
+     "name_en": "Green Curry",
+     "desc_cz": "Zelené kari s kokosovým mlékem, zelenina, mrkvev, lilek, brokolice, červená paprika, cibule, hrášek a rýže",
+     "desc_en": "Green curry with coconut milk, vegetables, carrots, eggplant, broccoli, red pepper, onion, peas and rice",
+     "price": null,
+     "allergens": [
+      4,
+      7
+     ],
+     "variants": [
+      {
+       "label_cz": "Kachna",
+       "label_en": "Duck",
+       "price": 279,
+       "allergens": []
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 269,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 249,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 229,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/42.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "42"
+    },
+    {
+     "number": "82",
+     "name": "Červené Kari",
+     "name_en": "Red Curry",
+     "desc_cz": "Červené kari s kokosovým mlékem, zeleninou, mrkví, lilkem, brokolicí, červenou paprikou, cibulí, bambusem, rajčaty cherry, ananasem a rýží",
+     "desc_en": "Red curry with coconut milk, vegetables, carrots, eggplant, broccoli, red pepper, onion, bamboo, cherry tomatoes, pineapple and rice",
+     "price": null,
+     "allergens": [
+      4,
+      7
+     ],
+     "variants": [
+      {
+       "label_cz": "Kachna",
+       "label_en": "Duck",
+       "price": 279,
+       "allergens": []
+      },
+      {
+       "label_cz": "Krevety",
+       "label_en": "Shrimps",
+       "price": 269,
+       "allergens": [
+        2
+       ]
+      },
+      {
+       "label_cz": "Hovězí",
+       "label_en": "Beef",
+       "price": 249,
+       "allergens": []
+      },
+      {
+       "label_cz": "Kuřecí",
+       "label_en": "Chicken",
+       "price": 239,
+       "allergens": []
+      },
+      {
+       "label_cz": "Tofu",
+       "label_en": "Tofu",
+       "price": 229,
+       "allergens": []
+      }
+     ],
+     "image": "/api/static/scraped/food/40.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "40"
+    }
+   ]
+  },
+  {
+   "name_cz": "Ryby & mořské plody",
+   "name_en": "Fish & seafood",
+   "items": [
+    {
+     "number": "91",
+     "name": "Pon Fair",
+     "name_en": "",
+     "desc_cz": "Sépie, krevety, mušla, cuketa, brokolice, celer, černá fazole, chilli, zázvor, česnek, chilli pasta a rýže",
+     "desc_en": "Cuttlefish, shrimp, mussels, zucchini, broccoli, celery, black beans, chili, ginger, garlic, chili paste and rice",
+     "price": 329,
+     "allergens": [
+      2,
+      4,
+      6,
+      9,
+      14
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/66.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "66"
+    },
+    {
+     "number": "92",
+     "name": "Pat Cha Talay",
+     "name_en": "",
+     "desc_cz": "Sépie, krevety, mušle, brokolice, paprika, cibule, chilli, česnek, chilli pasta",
+     "desc_en": "Cuttlefish, shrimp, mussels, broccoli, peppers, onions, chili, garlic, chili paste",
+     "price": 329,
+     "allergens": [
+      2,
+      4,
+      14
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/65.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "65"
+    },
+    {
+     "number": "95",
+     "name": "Grilovaný losos se sojovou omáčkou",
+     "name_en": "Grilled salmon with soy sauce",
+     "desc_cz": "Losos 150g, brokolice, paprika, cibule, cuketa, mrkev a rýže",
+     "desc_en": "Salmon 150g, broccoli, pepper, onion, zucchini, carrots and rice",
+     "price": 339,
+     "allergens": [
+      4,
+      6,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/60.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "60"
+    },
+    {
+     "number": "96",
+     "name": "Grilovaný losos s marakujovou omáčkou",
+     "name_en": "",
+     "desc_cz": "Losos 150g, americké brambory, salát, chřest, marakujová omáčka a brokolice",
+     "desc_en": "",
+     "price": 349,
+     "allergens": [
+      4,
+      12
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/316.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "316"
+    }
+   ]
+  },
+  {
+   "name_cz": "Přílohy",
+   "name_en": "Sides",
+   "items": [
+    {
+     "number": "100A",
+     "name": "Rýže",
+     "name_en": "Rice",
+     "desc_cz": "Rýže",
+     "desc_en": "Rice",
+     "price": 39,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/45.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "45"
+    },
+    {
+     "number": "100B",
+     "name": "Udon Nudle",
+     "name_en": "Udon noodles",
+     "desc_cz": "Udon Nudle",
+     "desc_en": "Udon noodles",
+     "price": 49,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/46.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "46"
+    },
+    {
+     "number": "100C",
+     "name": "Hranolky",
+     "name_en": "French fries",
+     "desc_cz": "Hranolky",
+     "desc_en": "French fries",
+     "price": 49,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/47.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "47"
+    },
+    {
+     "number": "100D",
+     "name": "Americké brambory",
+     "name_en": "American potatoes",
+     "desc_cz": "Americké brambory",
+     "desc_en": "American potatoes",
+     "price": 49,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/48.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "48"
+    }
+   ]
+  },
+  {
+   "name_cz": "Dezerty",
+   "name_en": "Desserts",
+   "items": [
+    {
+     "number": "110",
+     "name": "Smažený banán",
+     "name_en": "Friend banana",
+     "desc_cz": "Smažený banán (3ks)",
+     "desc_en": "Friend banana (3pcs)",
+     "price": 99,
+     "allergens": [
+      8
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/52.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "52"
+    },
+    {
+     "number": "111",
+     "name": "Banh Mochi 3ks",
+     "name_en": "Mochi cakes (3pcs)",
+     "desc_cz": "",
+     "desc_en": "",
+     "price": 99,
+     "allergens": [],
+     "variants": [],
+     "image": "/api/static/scraped/food/317.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "317"
+    },
+    {
+     "number": "112",
+     "name": "Černá rýže s jackfruitem a kokosem",
+     "name_en": "Black rice with jackfruit and coconut",
+     "desc_cz": "Černá rýže s jackfruitem a kokosem",
+     "desc_en": "",
+     "price": 119,
+     "allergens": [
+      7
+     ],
+     "variants": [],
+     "image": "/api/static/scraped/food/103.webp",
+     "vegetarian": false,
+     "vegan": false,
+     "visible": true,
+     "source_id": "103"
+    }
+   ]
+  }
+ ],
+ "daily_menus": [
+  {
+   "date": "2026-09-29",
+   "published": true,
+   "note_cz": "K polednímu menu polévka zdarma » Houbová polévka",
+   "note_en": "Free soup to the Lunch Menu » Mushroom soups",
+   "items": [
+    {
+     "name": "DM1. HU KRAPAO",
+     "desc_cz": "Restované tofu se zeleninou na pálivé chili omáčce s thajskou bazalkou a s rýží",
+     "desc_en": "Roasted tofu with vegetables in hot chili. sauce with Thai basil and rice",
+     "price": 169,
+     "allergens": [
+      1,
+      4
+     ]
+    },
+    {
+     "name": "DM2. LON CHAR SIU",
+     "desc_cz": "Restované vepřové se zeleninou na char siu omáčce a rýže",
+     "desc_en": "Sautéed pork with vegetables on char siu sauce and rice.",
+     "price": 179,
+     "allergens": [
+      4
+     ]
+    },
+    {
+     "name": "DM3. KUNG PAO GA",
+     "desc_cz": "Restované kuřecí maso se zeleninou na sladkokyselé omáčce s rýží",
+     "desc_en": "Sautéed chicken with vegetables in sweet and sour sauce with rice",
+     "price": 189,
+     "allergens": [
+      4,
+      5
+     ]
+    },
+    {
+     "name": "DM4. BO SOT THAI",
+     "desc_cz": "Restované hovězí se zelenina, Thajská chilli omáčka a rýže.",
+     "desc_en": "Sautéed beef with vegetables, Thai chilli sauce and rice",
+     "price": 199,
+     "allergens": [
+      4
+     ]
+    },
+    {
+     "name": "DM5. ŽLUTÉ KARI",
+     "desc_cz": "kuřecí, Žluté kari se zeleninou, kokosovým mlékem, omáčkou a rýží",
+     "desc_en": "Chicken, Yellow curry with vegetables, coconut milk, sauce and rice.",
+     "price": 209,
+     "allergens": [
+      4
+     ]
+    }
+   ]
+  }
+ ]
+}

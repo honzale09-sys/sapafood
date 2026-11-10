@@ -1,0 +1,33 @@
+{
+  "summary": "First-run E2E testing of Sapa Food FARM stack. All 30 backend pytest cases pass. Frontend public pages (CZ+EN), redirects, language switcher, hero video attrs, menu (10 cats/53 items with specific-item spot-checks), daily menu empty state, EN CZ fallback, JSON-LD Restaurant, sitemap/robots/openapi, admin login/logout, admin daily editor UI and admin regular menu editor all verified. Note: an initial front-end cache issue served the Emergent scaffold index.html (missing JSON-LD, wrong title); a supervisor restart resolved it — main agent should be aware if the same happens after future public/index.html edits.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AdminApp router (Gate wildcard)", "issue": "Navigating to an unknown admin sub-route (e.g. /admin/jidelni-listek instead of /admin/menu) triggers 'Maximum update depth exceeded' React error and hundreds of aborted requests instead of a single clean redirect to /admin/denni-menu. The relative <Navigate to=\"denni-menu\" replace /> inside the nested Routes appears to loop with the outer /admin/* route. Not user-reachable via UI (all nav links use correct paths) but is a genuine SPA bug.", "selector": "AdminApp.jsx <Route path=\"*\" element={<Navigate to=\"denni-menu\" replace />} />", "priority": "LOW"},
+      {"component": "public/index.html serving", "issue": "After changes to public/index.html, CRA dev server can serve a stale/emergent scaffold index.html (title 'Emergent | Fullstack App' with no JSON-LD, no hreflang) until frontend is restarted. Consider baking these SEO tags via a runtime component (react-helmet/react 19 <title>) to avoid dependence on dev-server template refresh.", "selector": "/app/frontend/public/index.html", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_sapa_backend.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "OPTIONAL: Investigate the /admin/wildcard→denni-menu render loop; consider absolute path '/admin/denni-menu' in the fallback Navigate.",
+    "OPTIONAL: Ensure SEO tags in public/index.html survive dev-server template caching (already served correctly after restart)."
+  ],
+  "critical_code_review_comments": [
+    "auth.py: login rate limit is per (ip+email) — good; but note x-forwarded-for is trusted without allowlist. Fine behind Kubernetes ingress but callout for future prod hardening.",
+    "routes_admin.py oid() returns 404 on invalid ObjectId — good UX.",
+    "AuthContext.jsx: user state uses null/false/object triple-state — clean.",
+    "AdminApp.jsx renders raw <title> and <meta> tags directly in JSX. In React 18/CRA this puts them in <body>, not <head>. Works but semantically wrong for SEO/robots.",
+    "api.js imgUrl returns '' on empty input — good (prevents empty <img src> loop).",
+    "server.py: FIELD_LABELS is fine, but validation_handler could join messages with newlines/HTML instead of single string for better UI display."
+  ],
+  "updated_files": ["/app/backend/tests/test_sapa_backend.py"],
+  "success_rate": {"backend": "100% (30/30)", "frontend": "~95% (all critical flows pass; two minor edge cases noted)"},
+  "test_credentials": "admin@sapa-food.cz / Sapa-tlWaTuUHUpYDvdD5!  (unchanged; not rotated by tests)",
+  "seed_data_creation": "Created and cleaned up a TEST daily menu for 2026-09-28 via backend test (published→verified→unpublished→verified→deleted). No residual data.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Backend regression tests live in /app/backend/tests/test_sapa_backend.py (30 tests, ~4s). Pytest already uses -n auto via pytest.ini. Public /api/menu returns 10 categories / 53 items. Prague 'today' during tests was 2026-09-28. Correct admin menu URL is /admin/menu (NOT /admin/jidelni-listek). If served HTML lacks JSON-LD/title, restart frontend supervisor.",
+  "rca of the issue": "1) /admin/jidelni-listek loop: nested <Routes> in AdminApp has a wildcard <Navigate to=\"denni-menu\" replace /> that appears to interact poorly with the outer /admin/* Route in App.js when the URL segment isn't one of the defined children, causing repeated remounts. Fix: use absolute path (to=\"/admin/denni-menu\"), or make the fallback a static component instead of Navigate. 2) Stale index.html: CRA dev server (webpack) had cached the emergent scaffold template before /app/frontend/public/index.html was modified. Fix: supervisorctl restart frontend or move SEO content into an in-tree component so it re-renders on hot reload."
+}

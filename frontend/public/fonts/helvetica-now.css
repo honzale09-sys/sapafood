@@ -1,0 +1,12 @@
+/* Helvetica Now self-hosting. Activate by uncommenting the <link> in /app/frontend/public/index.html
+   AFTER all files below exist in /app/frontend/public/fonts/. */
+@font-face { font-family: "Helvetica Now Text"; font-weight: 400; font-style: normal; font-display: swap;
+  src: url("./HelveticaNowText-Regular.woff2") format("woff2"), url("./HelveticaNowText-Regular.woff") format("woff"); }
+@font-face { font-family: "Helvetica Now Text"; font-weight: 500; font-style: normal; font-display: swap;
+  src: url("./HelveticaNowText-Medium.woff2") format("woff2"), url("./HelveticaNowText-Medium.woff") format("woff"); }
+@font-face { font-family: "Helvetica Now Text"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("./HelveticaNowText-Bold.woff2") format("woff2"), url("./HelveticaNowText-Bold.woff") format("woff"); }
+@font-face { font-family: "Helvetica Now Display"; font-weight: 700; font-style: normal; font-display: swap;
+  src: url("./HelveticaNowDisplay-Bold.woff2") format("woff2"), url("./HelveticaNowDisplay-Bold.woff") format("woff"); }
+@font-face { font-family: "Helvetica Now Display"; font-weight: 800; font-style: normal; font-display: swap;
+  src: url("./HelveticaNowDisplay-ExtraBold.woff2") format("woff2"), url("./HelveticaNowDisplay-ExtraBold.woff") format("woff"); }

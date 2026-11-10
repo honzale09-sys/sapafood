@@ -1,0 +1,195 @@
+{
+  "project_info": {
+    "name": "Sapa Food - Editorial Vietnamese Restaurant & CMS",
+    "location": "Vodičkova 699/28, Praha 1, Czech Republic",
+    "stack": "React.js + Tailwind CSS + FastAPI + MongoDB + Shadcn UI",
+    "languages": ["cz", "en"],
+    "design_archetype": "ARCHETYPE 1: ORGANIC & EARTHY / EDITORIAL RETRO-LUXURY (Dishoom & Bao London inspired)"
+  },
+  "design_principles": {
+    "1_fusion_over_imitation": "Blends Indochine warmth, vintage European editorial typography, and Hanoi street food soul into a tactile paper-and-lacquer aesthetic.",
+    "2_emotion_first": "Evokes nostalgia, rich aromas, and welcoming hospitality through warm cream tones, lacquer red accents, organic paper grain, and cinematic hero video.",
+    "3_content_is_king": "Presents Vietnamese gastronomy like a literary journal—clear bilingual dish names, allergen details, daily specials, and authentic food photography.",
+    "4_mobile_first_utility": "Designed primarily for phone users in central Prague with a sticky bottom action bar (Menu, Zavolat, Objednat) and an ultra-frictionless mobile CMS for the owner.",
+    "5_contrast_and_breathing_room": "Generous vertical rhythm, subtle borders, asymmetric bento photo grids, and strong typographic contrast."
+  },
+  "typography": {
+    "display_serif_headline": {
+      "font_family": "'Fraunces', 'Playfair Display', 'Cormorant Garamond', Georgia, serif",
+      "google_font_import": "https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=JetBrains+Mono:wght@400;500;600&display=swap",
+      "usage": "Main headings (H1, H2), hero title, daily menu headline, section storytelling titles",
+      "classes": "font-serif tracking-tight text-amber-950 dark:text-amber-100"
+    },
+    "body_sans": {
+      "font_family": "'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif",
+      "usage": "Body narrative, dish descriptions, allergen lists, contact info, form fields",
+      "classes": "font-sans leading-relaxed text-stone-800 dark:text-stone-200"
+    },
+    "utility_mono": {
+      "font_family": "'JetBrains Mono', monospace",
+      "usage": "Prices ('239 Kč'), allergen numbers (1–14), badge codes, operating hours tags, admin item counters",
+      "classes": "font-mono font-medium tracking-wide"
+    },
+    "scale": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight leading-tight",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-serif font-semibold tracking-snug",
+      "h3_card": "text-xl sm:text-2xl font-serif font-medium",
+      "h4_subheading": "text-lg sm:text-xl font-sans font-semibold",
+      "body_lg": "text-base sm:text-lg leading-relaxed",
+      "body": "text-sm sm:text-base leading-relaxed",
+      "caption_label": "text-xs sm:text-sm uppercase tracking-widest font-mono text-amber-900/70 dark:text-amber-200/70"
+    }
+  },
+  "color_palette": {
+    "theme_mode": "Light-first warm paper aesthetic with dark mode support for evening atmosphere",
+    "cream_paper_bg": {
+      "hex": "#FBF8F2",
+      "hsl": "38 43% 97%",
+      "tailwind_class": "bg-[#FBF8F2]",
+      "usage": "Primary page background, light cards, editorial sections"
+    },
+    "warm_beige_surface": {
+      "hex": "#F4EDE2",
+      "hsl": "36 37% 92%",
+      "tailwind_class": "bg-[#F4EDE2]",
+      "usage": "Card surfaces, sticky category nav background, modal backdrops"
+    },
+    "deep_lacquer_red": {
+      "hex": "#8C1D18",
+      "hsl": "2 71% 32%",
+      "tailwind_class": "bg-[#8C1D18] text-white hover:bg-[#721612]",
+      "usage": "Primary brand color, primary CTAs ('Objednat přes Wolt', 'Uložit'), active category tabs, key badges"
+    },
+    "tamarind_brown": {
+      "hex": "#3E2319",
+      "hsl": "16 43% 17%",
+      "tailwind_class": "text-[#3E2319]",
+      "usage": "Primary text headings, dark borders, footer background, primary emphasis"
+    },
+    "turmeric_gold_accent": {
+      "hex": "#D9822B",
+      "hsl": "30 70% 51%",
+      "tailwind_class": "bg-[#D9822B] text-amber-950",
+      "usage": "Highlight badges, 'Dnešní menu' star tag, daily price emphasis, star rating icons"
+    },
+    "dark_herb_green": {
+      "hex": "#1F3A2B",
+      "hsl": "146 31% 17%",
+      "tailwind_class": "bg-[#1F3A2B] text-emerald-100",
+      "usage": "Vegetarian & Vegan badges, fresh herb highlights, opening hours open tag"
+    },
+    "dark_mode": {
+      "bg": "#181412",
+      "surface": "#231E1B",
+      "card": "#2C2622",
+      "text_primary": "#F5EFE6",
+      "text_muted": "#A89F91",
+      "border": "#3D352E"
+    }
+  },
+  "layout_and_spacing": {
+    "grid_modes": {
+      "bento_asymmetric": "grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 (Hero image span-8, daily teaser span-4, narrative story span-7, gallery span-5)",
+      "menu_catalog": "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6",
+      "daily_menu_list": "max-w-3xl mx-auto space-y-4 sm:space-y-6",
+      "admin_dashboard": "grid-cols-1 lg:grid-cols-12 gap-6"
+    },
+    "padding_scale": {
+      "container": "px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto",
+      "section_spacing": "py-12 sm:py-20 lg:py-28",
+      "card_internal": "p-5 sm:p-7"
+    },
+    "borders_and_shadows": {
+      "border_style": "1px solid rgba(62, 35, 25, 0.12) dark:border-stone-800",
+      "border_accent": "1px solid #8C1D18",
+      "card_shadow": "shadow-[0_4px_20px_-4px_rgba(62,35,25,0.06)] hover:shadow-[0_8px_30px_-4px_rgba(62,35,25,0.12)] transition-shadow duration-300",
+      "radius": "rounded-lg sm:rounded-xl (tactile subtle roundness, max 12px)"
+    }
+  },
+  "key_features_and_components": {
+    "1_hero_section": {
+      "description": "Full-viewport video hero with fallback image poster, subtle dark gradient overlay (bg-black/45), headline in Fraunces serif, bilingual tagline, and immediate action CTAs.",
+      "ctas": ["Menu", "Dnešní menu", "Objednat (Wolt / Foodora)", "Zavolat"],
+      "video_attributes": "autoPlay muted loop playsInline poster='/images/hero-poster.jpg'"
+    },
+    "2_sticky_mobile_bottom_bar": {
+      "description": "Fixed bottom bar on mobile screens (block md:hidden) with quick action buttons for high conversion.",
+      "buttons": [
+        {"label": "Menu", "icon": "Utensils", "action": "/menu"},
+        {"label": "Zavolat", "icon": "Phone", "action": "tel:+420777000000"},
+        {"label": "Objednat", "icon": "ShoppingBag", "action": "Wolt / Foodora modal"}
+      ],
+      "classes": "fixed bottom-0 left-0 right-0 z-50 bg-[#F4EDE2]/95 backdrop-blur-md border-t border-[#3E2319]/15 p-2 px-4 flex items-center justify-between shadow-2xl md:hidden"
+    },
+    "3_sticky_menu_category_nav": {
+      "description": "Horizontal scrollable pill menu anchored to the top when scrolling through dish categories.",
+      "classes": "sticky top-16 z-40 bg-[#FBF8F2]/90 backdrop-blur-md border-b border-[#3E2319]/10 py-3 px-4 flex gap-2 overflow-x-auto no-scrollbar"
+    },
+    "4_dish_card": {
+      "structure": "Image (real PNG product dish photo on clean bg), Vietnamese Name (bold serif), Czech/English Description, Price in JetBrains Mono, Allergen badges (1-14), Veg/Vegan tag (Dark Herb Green badge), Variants select dropdown or radio chips (e.g. A. Krevety 239 Kč / B. Hovězí 229 Kč).",
+      "allergens_legend": "Full modal or expandable drawer showing 1–14 EU allergens standard code definitions."
+    },
+    "5_daily_menu_page": {
+      "header": "Dnešní menu (Today's Menu) with current date formatted in CZ ('Pondělí 12. května'), banner notice 'Podáváme do 14:00'.",
+      "empty_state": "Warm paper styled empty state card with 'Dnešní menu připravujeme...' and link to regular menu when no daily items are active for today."
+    },
+    "6_contact_page": {
+      "elements": "Interactive Google Maps iframe embedded in styled dark frame, complete opening hours matrix with live 'Právě otevřeno / Zavřeno' badge, telephone, email, address in Praha 1, delivery links (Wolt, Foodora)."
+    },
+    "7_admin_cms": {
+      "route": "/admin",
+      "mobile_optimized": "Designed specifically for non-technical owner operating from a smartphone.",
+      "features": [
+        "Login with credentials & change password screen",
+        "Daily Menu Editor: Date selector, item builder, 'Kopírovat z minulého dne' button, publish/unpublish toggle",
+        "Regular Menu Editor: Category CRUD & drag/order, item CRUD with Vietnamese/CZ/EN text, price, photo upload, allergen multi-select (1-14 checkboxes), veg/vegan badges, visible toggle, variant matrix builder"
+      ]
+    }
+  },
+  "media_assets": {
+    "food_photos_rule": "MUST use real product dish photos from local files/site assets. NO generic AI stock dish images for specific menu items.",
+    "background_textures": [
+      {
+        "category": "paper_grain",
+        "url": "https://images.unsplash.com/photo-1629968417841-d87296c4205b?auto=format&fit=crop&q=80&w=1200",
+        "description": "Subtle light brown recycled paper texture for section background overlays"
+      },
+      {
+        "category": "warm_atmosphere",
+        "url": "https://images.unsplash.com/photo-1616410731309-4e07df6b5d42?auto=format&fit=crop&q=80&w=1200",
+        "description": "Vietnamese coffee ceramic background texture"
+      }
+    ]
+  },
+  "testing_and_accessibility": {
+    "data_testid_rules": "All interactive elements, buttons, nav tabs, forms, admin controls, language switchers, and menu item cards MUST include explicit kebab-case data-testid attributes.",
+    "key_data_testids": [
+      "data-testid='header-nav-logo'",
+      "data-testid='language-switcher-cz'",
+      "data-testid='language-switcher-en'",
+      "data-testid='mobile-sticky-menu-button'",
+      "data-testid='mobile-sticky-call-button'",
+      "data-testid='mobile-sticky-wolt-button'",
+      "data-testid='hero-video-container'",
+      "data-testid='hero-cta-menu'",
+      "data-testid='hero-cta-daily-menu'",
+      "data-testid='hero-cta-order-wolt'",
+      "data-testid='category-tab-{category-id}'",
+      "data-testid='menu-item-card-{item-id}'",
+      "data-testid='allergen-badge-{allergen-num}'",
+      "data-testid='admin-login-email-input'",
+      "data-testid='admin-login-password-input'",
+      "data-testid='admin-login-submit-button'",
+      "data-testid='admin-daily-menu-copy-prev-day'",
+      "data-testid='admin-daily-menu-publish-toggle'",
+      "data-testid='admin-menu-add-item-button'"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Inject Google Font import for 'Fraunces', 'DM Sans', and 'JetBrains Mono' into index.html or top of App.js/CSS.",
+    "Configure custom tailwind colors inside tailwind.config.js for cream background, lacquer red, tamarind brown, turmeric gold, and dark herb green.",
+    "Ensure CSS scroll-reveal and transitions strictly respect prefers-reduced-motion media query.",
+    "Make sure all React components are written in standard JS (.js / .jsx). Do not use TS/TSX files.",
+    "Build the Admin interface with ultra-large touch targets (min 48px height) so the owner can seamlessly manage the menu from a mobile browser."
+  ]
+}
