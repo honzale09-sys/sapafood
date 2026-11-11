@@ -89,9 +89,6 @@ mobile/.metro-cache/
 **/.emergent/recordings/
 
 /media_src/
-.env
-.env.*
-*.env
 credentials.json
 *.key
 .credentials

@@ -34,6 +34,15 @@ Custom JWT (httpOnly cookie) auth; Emergent Object Storage for admin uploads; sc
 - httpx added. Tests updated for Vietnamese messages (30/30 pass).
 - Pending: TEYA_* / GOSMS_* / ORDER_SMS_TO secrets in backend/.env → then accepting=true.
 
+## Pay-at-pickup + customer e-mail (2026-11-11)
+- Applied update-pay-at-pickup-and-email.patch cleanly (9 files): mailer.py (SMTP), payment card/store, pay_store setting, contact e-mail lecongdiencz@gmail.com. Commit 208f5a1.
+- SMTP secrets are process env vars. Gmail SMTP AUTH is dropped from the preview pod (even dummy credentials) → login unverified here.
+
+## Order lookup token + pre-publish (2026-11-11)
+- Orders get `token` (secrets.token_urlsafe(24)); Teya return URLs, done page (?t=) and /api/orders/status/{key} use it; legacy orders without token still by ref. Tests: tests/test_order_token.py (fakes for Teya/GoSMS/SMTP), 35/35 pass.
+- Seeding from backend/seed/snapshot.json (current preview menu, 10 cats/53 items, same ids), only into an empty DB, replica-safe (settings marker "seed_menu"); admin seeded via upsert.
+- .gitignore no longer blocks .env files; canonical/hreflang/og use SITE.url = https://www.sapa-food.cz. Deployment check: PASS.
+
 ## Needs owner review
 - Story/about text (neutral food text, not from site), category names (site had none), featured dish selection, EN names/descriptions with typos copied from the site.
 

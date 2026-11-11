@@ -319,7 +319,9 @@ async def start_order(body: OrderStart, request: Request, background: Background
         raise HTTPException(status_code=429, detail="too_many_orders")
     site = None if store else _site_url(request)
     ref = await _new_ref()
-    doc = {"ref": ref, "status": "pending", "payment": body.payment, "created_at": datetime.now(timezone.utc), "date": today,
+    # Unguessable key for every public lookup; the short ref stays for the counter, SMS and e-mail.
+    token = secrets.token_urlsafe(24)
+    doc = {"ref": ref, "token": token, "status": "pending", "payment": body.payment, "created_at": datetime.now(timezone.utc), "date": today,
            "pickup": body.pickup, "name": body.name, "phone": body.phone, "email": body.email, "note": body.note, "lang": body.lang,
            "lines": lines, "total": total, "sms_state": None, "mail_state": None}
     if store:
@@ -327,11 +329,11 @@ async def start_order(body: OrderStart, request: Request, background: Background
         doc.update(status="confirmed", number=await _next_number(today))
         await db.orders.insert_one(doc)
         background.add_task(_notify, doc)
-        return {"ref": ref, "payment": "store"}
+        return {"ref": ref, "token": token, "payment": "store"}
     await db.orders.insert_one(doc)
 
-    done = f"{site}{'/en/order/done/' if body.lang == 'en' else '/objednavka/hotovo/'}?ref={ref}"
-    back = f"{site}{'/en/order/' if body.lang == 'en' else '/objednavka/'}?cancelled={ref}"
+    done = f"{site}{'/en/order/done/' if body.lang == 'en' else '/objednavka/hotovo/'}?t={token}"
+    back = f"{site}{'/en/order/' if body.lang == 'en' else '/objednavka/'}?cancelled=1"
     phone = re.sub(r"[^\d+]", "", body.phone)
     session_body = {
         "type": "SALE",
@@ -353,12 +355,13 @@ async def start_order(body: OrderStart, request: Request, background: Background
         await db.orders.update_one({"ref": ref}, {"$set": {"status": "failed", "error": "session_create_failed"}})
         raise HTTPException(status_code=502, detail="payment_unavailable")
     await db.orders.update_one({"ref": ref}, {"$set": {"teya_session_id": session["session_id"]}})
-    return {"ref": ref, "redirectUrl": session["session_url"]}
+    return {"ref": ref, "token": token, "redirectUrl": session["session_url"]}
 
 
-@router.get("/orders/status/{ref}")
-async def order_status(ref: str):
-    doc = await db.orders.find_one({"ref": ref.upper()})
+@router.get("/orders/status/{key}")
+async def order_status(key: str):
+    # New orders only by token; orders created before tokens existed still by their short ref.
+    doc = await db.orders.find_one({"token": key}) or await db.orders.find_one({"ref": key.upper(), "token": {"$exists": False}})
     if not doc:
         raise HTTPException(status_code=404, detail="not_found")
     return _public(await _confirm(doc))

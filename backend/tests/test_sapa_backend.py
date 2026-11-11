@@ -7,9 +7,12 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 from PIL import Image
 
+from pathlib import Path
+from dotenv import dotenv_values
+
 TODAY = datetime.now(ZoneInfo("Europe/Prague")).date().isoformat()
 
-BASE_URL = os.environ.get("REACT_APP_BACKEND_URL", "https://sapa-food-revamp.preview.emergentagent.com").rstrip("/")
+BASE_URL = (os.environ.get("REACT_APP_BACKEND_URL") or dotenv_values(Path(__file__).resolve().parents[2] / "frontend" / ".env")["REACT_APP_BACKEND_URL"]).rstrip("/")
 ADMIN_EMAIL = "admin@sapa-food.cz"
 ADMIN_PASSWORD = "Sapa-tlWaTuUHUpYDvdD5!"
 API = f"{BASE_URL}/api"

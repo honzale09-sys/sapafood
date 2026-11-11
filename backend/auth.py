@@ -72,10 +72,11 @@ async def seed_admin():
     fp = hashlib.sha256(password.encode()).hexdigest()
     existing = await db.users.find_one({"email": email})
     if existing is None:
-        await db.users.insert_one({
+        # Upsert so two replicas starting together can't create the admin twice.
+        await db.users.update_one({"email": email}, {"$setOnInsert": {
             "email": email, "password_hash": hash_password(password), "name": "Sapa Food",
             "role": "admin", "env_fp": fp, "created_at": datetime.now(timezone.utc).isoformat(),
-        })
+        }}, upsert=True)
     elif existing.get("env_fp") != fp:
         # env password changed deliberately -> reset; UI password changes are kept otherwise
         await db.users.update_one({"_id": existing["_id"]}, {"$set": {"password_hash": hash_password(password), "env_fp": fp}})

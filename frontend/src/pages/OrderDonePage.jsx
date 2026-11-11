@@ -17,7 +17,7 @@ export default function OrderDonePage() {
   const t = T[lang].cart;
   const { clear } = useCart();
   const [params] = useSearchParams();
-  const ref = params.get("ref");
+  const ref = params.get("t") || params.get("ref");
   const [order, setOrder] = useState(null);
   const [gaveUp, setGaveUp] = useState(false);
 

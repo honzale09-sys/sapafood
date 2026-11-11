@@ -68,7 +68,7 @@ export default function OrderPage() {
         lang: lang === "en" ? "en" : "cs",
       });
       if (data.redirectUrl) window.location.href = data.redirectUrl;
-      else navigate(`${ROUTES.orderDone[lang]}?ref=${encodeURIComponent(data.ref)}`);
+      else navigate(`${ROUTES.orderDone[lang]}?t=${encodeURIComponent(data.token)}`);
     } catch (err) {
       const code = err?.response?.data?.detail;
       if (code === "pickup_unavailable" || code === "pay_store_off") refreshOrdering();

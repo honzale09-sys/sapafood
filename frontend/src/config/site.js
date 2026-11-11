@@ -1,4 +1,5 @@
 export const SITE = {
+  url: "https://www.sapa-food.cz",
   name: "Sapa Food",
   phone: "+420 774 994 679",
   phoneHref: "tel:+420774994679",

@@ -39,7 +39,7 @@ export const HeroVideo = () => {
         alt=""
         aria-hidden
         data-testid="hero-poster-image"
-        fetchpriority="high"
+        fetchPriority="high"
         className="absolute inset-0 h-full w-full scale-105 object-cover"
       />
       <video

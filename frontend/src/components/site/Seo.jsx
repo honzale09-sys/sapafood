@@ -1,11 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { ROUTES, T, pageKeyFromPath } from "../../lib/i18n";
+import { SITE } from "../../config/site";
 
 export const Seo = ({ lang }) => {
   const { pathname } = useLocation();
   const key = pageKeyFromPath(pathname);
   const [title, desc] = T[lang].seo[key];
-  const origin = window.location.origin;
+  const origin = SITE.url;
   const r = ROUTES[key];
   return (
     <>
