@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Minus, Plus, Lock, Loader2, MapPin } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Minus, Plus, Lock, Loader2, MapPin, Send } from "lucide-react";
 import { toast } from "sonner";
 import { useLang } from "../components/site/Layout";
 import { useCart } from "../context/CartContext";
@@ -19,6 +19,7 @@ export default function OrderPage() {
   const t = T[lang].cart;
   const { lines, total, setQty, ordering, refreshOrdering } = useCart();
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const [form, setForm] = useState(() => {
     try {
       return { name: "", phone: "", email: "", note: "", ...JSON.parse(sessionStorage.getItem(FORM_KEY) || "{}"), pickup: "" };
@@ -27,6 +28,7 @@ export default function OrderPage() {
     }
   });
   const [paying, setPaying] = useState(false);
+  const [payment, setPayment] = useState("card");
 
   useEffect(refreshOrdering, [refreshOrdering]);
   useEffect(() => {
@@ -45,6 +47,13 @@ export default function OrderPage() {
     if (slots.length && !slots.includes(form.pickup)) setForm((f) => ({ ...f, pickup: slots[0] }));
   }, [slots.join()]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Offer only the ways of paying that are switched on; card first.
+  const methods = ["card", "store"].filter((m) => ordering?.[m]);
+  useEffect(() => {
+    if (methods.length && !methods.includes(payment)) setPayment(methods[0]);
+  }, [methods.join()]); // eslint-disable-line react-hooks/exhaustive-deps
+  const store = payment === "store";
+
   const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   const submit = async (e) => {
@@ -55,17 +64,20 @@ export default function OrderPage() {
       const { data } = await api.post("/orders/start", {
         lines: lines.map((l) => ({ item_id: l.item_id, variant: l.variant, qty: l.qty })),
         ...form,
+        payment,
         lang: lang === "en" ? "en" : "cs",
       });
-      window.location.href = data.redirectUrl;
+      if (data.redirectUrl) window.location.href = data.redirectUrl;
+      else navigate(`${ROUTES.orderDone[lang]}?ref=${encodeURIComponent(data.ref)}`);
     } catch (err) {
       const code = err?.response?.data?.detail;
-      if (code === "pickup_unavailable") refreshOrdering();
+      if (code === "pickup_unavailable" || code === "pay_store_off") refreshOrdering();
       toast.error(
         code === "item_unavailable" ? t.unavailable
           : code === "pickup_unavailable" ? t.slotGone
           : code === "ordering_closed" ? t.closed
           : code === "payments_not_configured" || code === "payment_unavailable" ? t.payDown
+          : code === "too_many_orders" ? t.tooMany
           : typeof code === "string" && err.response.status === 422 ? code
           : t.error,
       );
@@ -121,17 +133,36 @@ export default function OrderPage() {
                   <textarea id="order-note" data-testid="order-note" rows={2} maxLength={300} className={`${inputCls} h-auto py-3`} placeholder={t.notePlaceholder} value={form.note} onChange={set("note")} />
                 </div>
               </div>
+              {methods.length > 1 && (
+                <fieldset data-testid="order-payment">
+                  <legend className={labelCls}>{t.payment}</legend>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {methods.map((m) => (
+                      <label
+                        key={m}
+                        className={`flex cursor-pointer gap-3 rounded-xl border p-4 transition-colors ${payment === m ? "border-lacquer bg-lacquer/5" : "border-tamarind/20 bg-paper"}`}
+                      >
+                        <input type="radio" name="payment" value={m} checked={payment === m} onChange={() => setPayment(m)} className="mt-1 accent-lacquer" data-testid={`order-payment-${m}`} />
+                        <span>
+                          <span className="block text-sm font-medium text-tamarind">{m === "card" ? t.payCard : t.payStore}</span>
+                          <span className="block text-xs text-tamarind/60">{m === "card" ? t.payCardHint : t.payStoreHint}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
               <button
                 type="submit"
                 disabled={paying || !ordering}
                 data-testid="order-pay"
                 className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-lacquer text-[15px] font-medium text-paper transition-colors hover:bg-lacquer-dark disabled:opacity-60"
               >
-                {paying ? <Loader2 size={18} className="animate-spin" /> : <Lock size={16} />}
-                {paying ? t.paying : `${t.pay} · ${formatPrice(total)}`}
+                {paying ? <Loader2 size={18} className="animate-spin" /> : store ? <Send size={16} /> : <Lock size={16} />}
+                {paying ? (store ? t.sending : t.paying) : `${store ? t.send : t.pay} · ${formatPrice(total)}`}
               </button>
               <p className="text-center text-xs text-tamarind/60">
-                {t.agree} {t.agreeLegal[0]}{" "}
+                {store ? t.agreeStore : t.agree} {t.agreeLegal[0]}{" "}
                 <Link to={ROUTES.terms[lang]} className="underline underline-offset-2" data-testid="order-terms-link">{t.agreeLegal[1]}</Link>. {t.agreeLegal[2]}{" "}
                 <Link to={ROUTES.privacy[lang]} className="underline underline-offset-2" data-testid="order-privacy-link">{t.agreeLegal[3]}</Link>.
               </p>

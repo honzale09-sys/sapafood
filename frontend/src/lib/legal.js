@@ -1,13 +1,13 @@
 // Business terms and privacy policy for online pickup orders. Operator data from the Czech business register (ARES).
-const EFFECTIVE = { cs: "10. 11. 2026", en: "10 November 2026" };
+const EFFECTIVE = { cs: "11. 11. 2026", en: "11 November 2026" };
 
 const OPERATOR = {
   cs: "HOANGANHCZ s.r.o., IČO 05540488, DIČ CZ05540488, se sídlem Na Suchých 212, 252 50 Vestec, zapsaná v obchodním rejstříku vedeném Městským soudem v Praze, oddíl C, vložka 265441",
   en: "HOANGANHCZ s.r.o., company ID 05540488, VAT ID CZ05540488, registered office Na Suchých 212, 252 50 Vestec, Czech Republic, registered in the Commercial Register kept by the Municipal Court in Prague, section C, file 265441",
 };
 const CONTACT = {
-  cs: "Restaurace Sapa Food, Vodičkova 699/28, 110 00 Praha 1, tel. +420 774 994 679, e-mail info@sapa-food.cz",
-  en: "Sapa Food restaurant, Vodičkova 699/28, 110 00 Prague 1, phone +420 774 994 679, e-mail info@sapa-food.cz",
+  cs: "Restaurace Sapa Food, Vodičkova 699/28, 110 00 Praha 1, tel. +420 774 994 679, e-mail lecongdiencz@gmail.com",
+  en: "Sapa Food restaurant, Vodičkova 699/28, 110 00 Prague 1, phone +420 774 994 679, e-mail lecongdiencz@gmail.com",
 };
 
 export const LEGAL = {
@@ -21,30 +21,33 @@ export const LEGAL = {
           h: "2. Objednávka a uzavření smlouvy",
           p: [
             "Na webu sapa-food.cz si objednáváte jídla z našeho menu k osobnímu vyzvednutí v restauraci na Vodičkově 699/28. Rozvoz nezajišťujeme.",
-            "V objednávce vyplníte jméno, telefon, e-mail, čas vyzvednutí (vždy v daný den) a případně poznámku pro kuchyni. Před odesláním můžete objednávku zkontrolovat a změnit.",
-            "Kupní smlouva je uzavřena okamžikem, kdy je platba za objednávku úspěšně dokončena. Poté se vám zobrazí potvrzení s číslem objednávky.",
+            "V objednávce vyplníte jméno, telefon, e-mail, čas vyzvednutí (vždy v daný den), způsob platby a případně poznámku pro kuchyni. Před odesláním můžete objednávku zkontrolovat a změnit.",
+            "Při platbě kartou online je kupní smlouva uzavřena okamžikem, kdy je platba úspěšně dokončena. Při platbě na místě je uzavřena odesláním objednávky.",
+            "Poté se vám zobrazí potvrzení s číslem objednávky a stejné potvrzení vám pošleme e-mailem.",
           ],
         },
         {
           h: "3. Ceny a platba",
           p: [
             "Ceny na webu jsou konečné, včetně DPH. Platí cena uvedená v objednávce v okamžiku jejího odeslání.",
-            "Objednávka se hradí předem platební kartou přes platební bránu Teya. Údaje o platební kartě nezpracováváme, zpracovává je poskytovatel platební brány.",
+            "Objednávku můžete zaplatit předem platební kartou přes platební bránu Teya, nebo na místě při vyzvednutí (hotově nebo kartou), pokud je tato možnost u objednávky nabízena.",
+            "Údaje o platební kartě při platbě online nezpracováváme, zpracovává je poskytovatel platební brány.",
           ],
         },
         {
           h: "4. Vyzvednutí",
           p: [
             "Objednávku si vyzvedněte ve zvoleném čase v restauraci. Při vyzvednutí uveďte číslo objednávky nebo jméno.",
-            "Pokud objednávku nemůžeme připravit (např. dojde surovina nebo nastane provozní problém), ozveme se vám na uvedený telefon a domluvíme náhradu, nebo vám celou částku vrátíme na platební kartu.",
+            "Pokud objednávku nemůžeme připravit (např. dojde surovina nebo nastane provozní problém), ozveme se vám na uvedený telefon a domluvíme náhradu, nebo objednávku zrušíme a částku zaplacenou kartou online vám celou vrátíme.",
             "Nevyzvednuté jídlo uchováváme do konce otevírací doby daného dne. Protože jde o čerstvě připravené jídlo, zaplacená cena se za nevyzvednutou objednávku nevrací.",
+            "Pokud si objednávku s platbou na místě nevyzvednete, můžeme vám další objednávky s platbou na místě odmítnout a nabídnout jen platbu kartou předem.",
           ],
         },
         {
           h: "5. Odstoupení od smlouvy",
           p: [
             "Jídla připravujeme na objednávku a podléhají rychlé zkáze. Podle § 1837 písm. d) občanského zákoníku proto nelze od uzavřené smlouvy odstoupit bez udání důvodu.",
-            "Pokud chcete objednávku zrušit, zavolejte nám co nejdříve. Dokud jsme s přípravou nezačali, vyhovíme vám a peníze vrátíme.",
+            "Pokud chcete objednávku zrušit, zavolejte nám co nejdříve. Dokud jsme s přípravou nezačali, vyhovíme vám a peníze zaplacené kartou online vrátíme.",
           ],
         },
         {
@@ -77,30 +80,33 @@ export const LEGAL = {
           h: "2. Ordering and the contract",
           p: [
             "On sapa-food.cz you order dishes from our menu for pickup at the restaurant at Vodičkova 699/28. We do not deliver.",
-            "You enter your name, phone, e-mail, a pickup time (always on the same day) and an optional note for the kitchen. You can review and change the order before sending it.",
-            "The contract is concluded when the payment for the order is completed. You then see a confirmation with your order number.",
+            "You enter your name, phone, e-mail, a pickup time (always on the same day), how you want to pay and an optional note for the kitchen. You can review and change the order before sending it.",
+            "When paying by card online, the contract is concluded when the payment is completed. When paying at the restaurant, it is concluded when you send the order.",
+            "You then see a confirmation with your order number, and we send the same confirmation by e-mail.",
           ],
         },
         {
           h: "3. Prices and payment",
           p: [
             "Prices on the website are final and include VAT. The price shown when you send the order applies.",
-            "Orders are paid in advance by card through the Teya payment gateway. We do not process your card details; the payment provider does.",
+            "You can pay in advance by card through the Teya payment gateway, or at the restaurant on pickup (cash or card) where this option is offered.",
+            "When paying online we do not process your card details; the payment provider does.",
           ],
         },
         {
           h: "4. Pickup",
           p: [
             "Pick up your order at the restaurant at the chosen time and give your order number or name.",
-            "If we cannot prepare the order (e.g. an ingredient runs out or an operational problem occurs), we will call you to agree on a replacement or refund the full amount to your card.",
+            "If we cannot prepare the order (e.g. an ingredient runs out or an operational problem occurs), we will call you to agree on a replacement, or cancel the order and refund in full anything paid by card online.",
             "Uncollected food is kept until closing time that day. As it is freshly prepared, the price of an uncollected order is not refunded.",
+            "If you do not collect an order you chose to pay for at the restaurant, we may refuse further pay-on-pickup orders from you and offer only card payment in advance.",
           ],
         },
         {
           h: "5. Withdrawal",
           p: [
             "Dishes are prepared to order and are perishable. Under Section 1837(d) of the Czech Civil Code, you therefore cannot withdraw from the contract without giving a reason.",
-            "If you want to cancel, call us as soon as possible. As long as we have not started preparing it, we will cancel the order and refund you.",
+            "If you want to cancel, call us as soon as possible. As long as we have not started preparing it, we will cancel the order and refund anything paid by card online.",
           ],
         },
         {
@@ -131,7 +137,7 @@ export const LEGAL = {
         {
           h: "2. Jaké údaje a proč",
           p: [
-            "Online objednávky: jméno, telefon, e-mail, poznámka, objednaná jídla, čas vyzvednutí a stav platby. Potřebujeme je, abychom objednávku připravili, předali vám ji a v případě potřeby vás kontaktovali (plnění smlouvy, čl. 6 odst. 1 písm. b) GDPR).",
+            "Online objednávky: jméno, telefon, e-mail, poznámka, objednaná jídla, čas vyzvednutí, způsob a stav platby. Potřebujeme je, abychom objednávku připravili, poslali vám e-mailem potvrzení, předali vám ji a v případě potřeby vás kontaktovali (plnění smlouvy, čl. 6 odst. 1 písm. b) GDPR).",
             "Účetnictví a daně: údaje o objednávce a platbě uchováváme po dobu, kterou ukládají daňové a účetní předpisy, nejdéle 10 let (právní povinnost, čl. 6 odst. 1 písm. c) GDPR).",
             "Ostatní údaje z objednávek mažeme nejpozději 3 roky po objednávce, kvůli případným reklamacím a nárokům (oprávněný zájem, čl. 6 odst. 1 písm. f) GDPR).",
           ],
@@ -141,6 +147,7 @@ export const LEGAL = {
           p: [
             "Poskytovatel platební brány Teya: platbu kartou, včetně údajů o kartě, zpracovává on. My údaje o kartě nevidíme.",
             "GoSMS: pošle restauraci SMS s vaší objednávkou, jménem a telefonem, aby ji kuchyně mohla hned připravit.",
+            "Poskytovatel naší e-mailové schránky: přes něj vám posíláme potvrzení objednávky.",
             "Emergent: provozovatel serverů, na kterých běží web a databáze objednávek.",
             "Údaje neprodáváme a nepoužíváme je k reklamě.",
           ],
@@ -156,7 +163,7 @@ export const LEGAL = {
           h: "5. Vaše práva",
           p: [
             "Máte právo na přístup ke svým údajům, jejich opravu nebo výmaz, omezení zpracování, přenositelnost a právo vznést námitku proti zpracování na základě oprávněného zájmu.",
-            "Svá práva uplatněte na info@sapa-food.cz. Máte také právo podat stížnost u Úřadu pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7, www.uoou.gov.cz.",
+            "Svá práva uplatněte na lecongdiencz@gmail.com. Máte také právo podat stížnost u Úřadu pro ochranu osobních údajů, Pplk. Sochora 27, 170 00 Praha 7, www.uoou.gov.cz.",
           ],
         },
       ],
@@ -169,7 +176,7 @@ export const LEGAL = {
         {
           h: "2. What data and why",
           p: [
-            "Online orders: name, phone, e-mail, note, ordered dishes, pickup time and payment status. We need them to prepare and hand over your order and to contact you if needed (performance of a contract, Art. 6(1)(b) GDPR).",
+            "Online orders: name, phone, e-mail, note, ordered dishes, pickup time, payment method and status. We need them to prepare your order, e-mail you the confirmation, hand the order over and contact you if needed (performance of a contract, Art. 6(1)(b) GDPR).",
             "Accounting and tax: order and payment records are kept for the period required by tax and accounting law, at most 10 years (legal obligation, Art. 6(1)(c) GDPR).",
             "Other order data is deleted at the latest 3 years after the order, for possible complaints and claims (legitimate interest, Art. 6(1)(f) GDPR).",
           ],
@@ -179,6 +186,7 @@ export const LEGAL = {
           p: [
             "The Teya payment gateway processes the card payment, including card details. We never see your card details.",
             "GoSMS sends the restaurant a text message with your order, name and phone, so the kitchen can start right away.",
+            "Our e-mail provider delivers your order confirmation.",
             "Emergent operates the servers that run the website and the order database.",
             "We do not sell your data or use it for advertising.",
           ],
@@ -194,7 +202,7 @@ export const LEGAL = {
           h: "5. Your rights",
           p: [
             "You have the right to access, rectify or erase your data, to restrict processing, to data portability, and to object to processing based on legitimate interest.",
-            "Exercise your rights at info@sapa-food.cz. You may also lodge a complaint with the Czech Office for Personal Data Protection, Pplk. Sochora 27, 170 00 Prague 7, www.uoou.gov.cz.",
+            "Exercise your rights at lecongdiencz@gmail.com. You may also lodge a complaint with the Czech Office for Personal Data Protection, Pplk. Sochora 27, 170 00 Prague 7, www.uoou.gov.cz.",
           ],
         },
       ],

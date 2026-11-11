@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircle2, MessageSquareWarning, RefreshCw, Save } from "lucide-react";
+import { CheckCircle2, MailWarning, MessageSquareWarning, RefreshCw, Save } from "lucide-react";
 import { toast } from "sonner";
 import { api, errMsg } from "../../lib/api";
 import { formatPrice } from "../../lib/i18n";
@@ -18,7 +18,7 @@ const SettingsCard = () => {
   const save = async (next = s) => {
     setSaving(true);
     try {
-      const { data } = await api.put("/admin/ordering", { enabled: next.enabled, open: next.open, close: next.close, lead_minutes: Number(next.lead_minutes) || 0 });
+      const { data } = await api.put("/admin/ordering", { enabled: next.enabled, pay_store: next.pay_store, open: next.open, close: next.close, lead_minutes: Number(next.lead_minutes) || 0 });
       setS(data);
       toast.success("Đã lưu.");
     } catch (e) {
@@ -45,6 +45,22 @@ const SettingsCard = () => {
           }}
         />
       </div>
+      <div className="flex items-center justify-between gap-4 border-t border-tamarind/10 pt-4">
+        <div>
+          <p className="font-medium">Cho phép trả tiền khi lấy hàng</p>
+          <p className="text-sm text-tamarind/60">Khách có thể chọn trả tại quầy thay vì trả bằng thẻ online. Tối đa 3 đơn chưa trả mỗi số điện thoại mỗi ngày.</p>
+        </div>
+        <Switch
+          checked={s.pay_store}
+          disabled={saving}
+          data-testid="admin-ordering-pay-store"
+          onCheckedChange={(pay_store) => {
+            const next = { ...s, pay_store };
+            setS(next);
+            save(next);
+          }}
+        />
+      </div>
       <div className="grid gap-3 sm:grid-cols-3">
         <Field label="Nhận đơn từ"><input className={inputCls} type="time" value={s.open} onChange={(e) => setS({ ...s, open: e.target.value })} /></Field>
         <Field label="Đến (giờ đóng cửa)"><input className={inputCls} type="time" value={s.close} onChange={(e) => setS({ ...s, close: e.target.value })} /></Field>
@@ -52,7 +68,7 @@ const SettingsCard = () => {
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-xs text-tamarind/60">
-          Thanh toán: {s.payments ? "đã kết nối" : "chưa cài đặt"} · SMS cho nhà hàng: {s.sms ? "đã kết nối" : "chưa cài đặt"}
+          Thanh toán thẻ: {s.payments ? "đã kết nối" : "chưa cài đặt"} · SMS cho nhà hàng: {s.sms ? "đã kết nối" : "chưa cài đặt"} · Email cho khách: {s.mail ? "đã kết nối" : "chưa cài đặt"}
         </p>
         <button type="button" onClick={() => save()} disabled={saving} className="flex h-11 items-center gap-2 rounded-full bg-lacquer px-5 text-sm font-medium text-paper disabled:opacity-60">
           <Save size={16} /> Lưu giờ
@@ -88,7 +104,7 @@ export default function AdminOrders() {
       <div className="flex items-end justify-between gap-4">
         <div>
           <h1 className="font-display text-3xl">Đơn hàng</h1>
-          <p className="mt-1 text-sm text-tamarind/60">Đơn đã thanh toán hôm nay, khách đến lấy. Tự cập nhật mỗi 30 giây.</p>
+          <p className="mt-1 text-sm text-tamarind/60">Đơn hôm nay, khách đến lấy. Tự cập nhật mỗi 30 giây.</p>
         </div>
         <button type="button" onClick={load} className="flex h-11 w-11 items-center justify-center rounded-full border border-tamarind/20" aria-label="Làm mới">
           <RefreshCw size={16} />
@@ -112,6 +128,11 @@ export default function AdminOrders() {
                       <MessageSquareWarning size={14} /> chưa gửi SMS
                     </span>
                   )}
+                  {o.mail_state !== "sent" && (
+                    <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-900" title="Không gửi được email cho khách">
+                      <MailWarning size={14} /> chưa gửi email
+                    </span>
+                  )}
                   {o.status === "done" ? (
                     <span className="flex items-center gap-1 text-sm text-herb"><CheckCircle2 size={16} /> Đã giao</span>
                   ) : (
@@ -130,7 +151,11 @@ export default function AdminOrders() {
                 ))}
               </ul>
               {o.note && <p className="mt-2 rounded-lg bg-sand px-3 py-2 text-sm">Ghi chú: {o.note}</p>}
-              <p className="mt-2 text-right font-mono text-sm">Tổng {formatPrice(o.total)} · đã thanh toán</p>
+              {o.payment === "store" ? (
+                <p className="mt-2 text-right font-mono text-sm font-semibold text-lacquer" data-testid={`admin-order-collect-${o.ref}`}>Tổng {formatPrice(o.total)} · CHƯA TRẢ, thu tiền khi lấy</p>
+              ) : (
+                <p className="mt-2 text-right font-mono text-sm">Tổng {formatPrice(o.total)} · đã thanh toán</p>
+              )}
             </li>
           ))}
         </ul>

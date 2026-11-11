@@ -1,5 +1,7 @@
-"""Online orders for pickup: priced from the menu on the server, paid by card through Teya Hosted Checkout,
-and announced to the restaurant by SMS (GoSMS) once Teya confirms the payment."""
+"""Online orders for pickup: priced from the menu on the server, paid by card through Teya Hosted Checkout
+or at the counter on pickup. Once an order is confirmed (card payment verified with Teya, or straight away
+when paying at pickup) the restaurant gets an SMS (GoSMS) and the customer a confirmation e-mail (SMTP)."""
+import html
 import logging
 import os
 import re
@@ -14,6 +16,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request
 from pydantic import BaseModel, Field, field_validator
 
 import gosms
+import mailer
 import teya_client as teya
 from auth import get_current_user
 from db import db
@@ -29,9 +32,14 @@ PHONE_RE = re.compile(r"^\+?[0-9 ]{9,17}$")
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 HHMM_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
 SMS_RETRY_SECONDS = 120
+# Orders the kitchen should make: paid by card, or placed to be paid at pickup.
+CONFIRMED = ("paid", "confirmed")
+# Unpaid pickup orders cost the kitchen food if nobody comes, so one phone number gets only a few a day.
+STORE_ORDERS_PER_PHONE = 3
 
 # Editable in the admin; the hours match the opening hours on the site.
-DEFAULTS = {"enabled": True, "open": "10:30", "close": "22:30", "lead_minutes": 20, "step_minutes": 15, "last_before_close": 15}
+DEFAULTS = {"enabled": True, "pay_store": True, "open": "10:30", "close": "22:30", "lead_minutes": 20, "step_minutes": 15,
+            "last_before_close": 15}
 
 
 class OrderLine(BaseModel):
@@ -48,6 +56,7 @@ class OrderStart(BaseModel):
     pickup: str
     note: str = ""
     lang: Literal["cs", "en"] = "cs"
+    payment: Literal["card", "store"] = "card"
 
     @field_validator("name")
     @classmethod
@@ -81,6 +90,7 @@ class OrderStart(BaseModel):
 
 class OrderingSettings(BaseModel):
     enabled: bool
+    pay_store: bool = True
     open: str
     close: str
     lead_minutes: int = Field(ge=0, le=180)
@@ -155,7 +165,8 @@ async def _new_ref() -> str:
 
 
 def _public(doc: dict) -> dict:
-    return {"ref": doc["ref"], "number": doc.get("number"), "status": doc["status"], "pickup": doc["pickup"], "total": doc["total"], "name": doc["name"],
+    return {"ref": doc["ref"], "number": doc.get("number"), "status": doc["status"], "payment": doc.get("payment", "card"), "pickup": doc["pickup"],
+            "total": doc["total"], "name": doc["name"], "mail": mailer.configured(),
             "lines": [{k: line[k] for k in ("number", "name", "name_en", "label", "qty", "price")} for line in doc["lines"]]}
 
 
@@ -164,7 +175,7 @@ def _sms_text(doc: dict) -> str:
     items = "\n".join(f"{line['qty']}x {line['number'] + ' ' if line['number'] else ''}{line['name']}{' (' + line['label'] + ')' if line['label'] else ''}"
                       for line in doc["lines"])
     text = (f"ĐƠN HÀNG SỐ #{doc['number']}\nGiờ lấy: {doc['pickup']}\nTên: {doc['name']}\nSĐT: {doc['phone']}\n"
-            f"Món:\n{items}\nTổng: {doc['total']} Kč, ĐÃ THANH TOÁN")
+            f"Món:\n{items}\nTổng: {doc['total']} Kč, {'CHƯA THANH TOÁN - THU TIỀN KHI LẤY' if doc.get('payment') == 'store' else 'ĐÃ THANH TOÁN'}")
     return text + (f"\n\nGhi chú: {doc['note']}" if doc.get("note") else "")
 
 
@@ -174,26 +185,82 @@ async def _next_number(date: str) -> int:
     return counter["n"]
 
 
-async def _notify(doc: dict) -> dict:
-    """Sends the restaurant SMS once. The state switch is atomic, so a webhook and a poll can't both send it."""
+MAIL_TEXT = {
+    "cs": {"subject": "Objednávka č. {n} je potvrzená – Sapa Food", "hello": "Dobrý den, {name},", "intro": "děkujeme, vaši objednávku máme a kuchyně už o ní ví.",
+           "number": "Číslo objednávky", "pickup": "Vyzvednutí dnes v", "where": "Sapa Food, Vodičkova 699/28, Praha 1", "total": "Celkem",
+           "paid": "Zaplaceno kartou.", "store": "Zaplatíte při vyzvednutí.", "note": "Poznámka", "show": "Při vyzvednutí řekněte číslo objednávky nebo jméno.",
+           "contact": "Potřebujete něco změnit? Zavolejte nám na +420 774 994 679 nebo napište na lecongdiencz@gmail.com."},
+    "en": {"subject": "Order no. {n} confirmed – Sapa Food", "hello": "Hello {name},", "intro": "thank you, we have your order and the kitchen is on it.",
+           "number": "Order number", "pickup": "Pickup today at", "where": "Sapa Food, Vodičkova 699/28, Prague 1", "total": "Total",
+           "paid": "Paid by card.", "store": "You pay when you pick it up.", "note": "Note", "show": "When you pick it up, give your order number or name.",
+           "contact": "Need to change something? Call us on +420 774 994 679 or write to lecongdiencz@gmail.com."},
+}
+
+
+def _mail(doc: dict):
+    """Confirmation for the customer in the language they ordered in: subject, plain text, HTML."""
+    en = doc.get("lang") == "en"
+    t = MAIL_TEXT["en" if en else "cs"]
+    price = lambda v: f"{v} Kč"  # noqa: E731
+    rows = [(f"{line['qty']}× {line['number'] + ' ' if line['number'] else ''}{(line['name_en'] if en and line['name_en'] else line['name'])}"
+             f"{' (' + line['label'] + ')' if line['label'] else ''}", price(line["price"] * line["qty"])) for line in doc["lines"]]
+    pay = t["store"] if doc.get("payment") == "store" else t["paid"]
+    note = doc.get("note") or ""
+    text = "\n".join([t["hello"].format(name=doc["name"]), t["intro"], "", f"{t['number']}: #{doc['number']}",
+                      f"{t['pickup']} {doc['pickup']}, {t['where']}", "", *[f"{a}  {b}" for a, b in rows],
+                      f"{t['total']}: {price(doc['total'])}", pay, *([f"{t['note']}: {note}"] if note else []), "", t["show"], t["contact"]])
+    e = html.escape
+    items = "".join(f'<tr><td style="padding:6px 0">{e(a)}</td><td style="padding:6px 0;text-align:right;white-space:nowrap">{e(b)}</td></tr>' for a, b in rows)
+    body = f"""<div style="font-family:Arial,Helvetica,sans-serif;color:#3b2a20;max-width:520px;margin:0 auto;line-height:1.5">
+<p>{e(t['hello'].format(name=doc['name']))}<br>{e(t['intro'])}</p>
+<p style="margin:24px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#a3312a">{e(t['number'])}</p>
+<p style="margin:0;font-size:40px;font-weight:bold">#{doc['number']}</p>
+<p>{e(t['pickup'])} <strong>{e(doc['pickup'])}</strong><br>{e(t['where'])}</p>
+<table style="width:100%;border-collapse:collapse;border-top:1px solid #e5dccf;border-bottom:1px solid #e5dccf">{items}
+<tr><td style="padding:8px 0;border-top:1px solid #e5dccf"><strong>{e(t['total'])}</strong></td>
+<td style="padding:8px 0;border-top:1px solid #e5dccf;text-align:right"><strong>{e(price(doc['total']))}</strong></td></tr></table>
+<p><strong>{e(pay)}</strong></p>{f"<p>{e(t['note'])}: {e(note)}</p>" if note else ""}
+<p style="color:#6b5a4e">{e(t['show'])}<br>{e(t['contact'])}</p></div>"""
+    return t["subject"].format(n=doc["number"]), text, body
+
+
+async def _send_sms(doc: dict) -> None:
+    if not ORDER_SMS_TO:
+        raise gosms.GoSmsError("no_recipient")
+    await gosms.send(ORDER_SMS_TO, _sms_text(doc))
+
+
+async def _send_mail(doc: dict) -> None:
+    await mailer.send(doc["email"], *_mail(doc))
+
+
+async def _deliver(ref: str, key: str, send) -> None:
+    """Sends one message (the restaurant SMS or the customer e-mail) once per order. The state switch is atomic,
+    so a webhook and a poll can't both send it; a failure is retried on a later status check."""
     claimed = await db.orders.find_one_and_update(
-        {"ref": doc["ref"], "status": "paid", "$or": [{"sms_state": None},
-                                                      {"sms_state": "error", "sms_attempt_at": {"$lt": time.time() - SMS_RETRY_SECONDS}}]},
-        {"$set": {"sms_state": "sending", "sms_attempt_at": time.time()}},
+        {"ref": ref, "status": {"$in": list(CONFIRMED)}, "$or": [{f"{key}_state": None},
+                                                                 {f"{key}_state": "error", f"{key}_attempt_at": {"$lt": time.time() - SMS_RETRY_SECONDS}}]},
+        {"$set": {f"{key}_state": "sending", f"{key}_attempt_at": time.time()}},
         return_document=True,
     )
     if not claimed:
-        return await db.orders.find_one({"ref": doc["ref"]})
+        return
     try:
-        if not ORDER_SMS_TO:
-            raise gosms.GoSmsError("no_recipient")
-        await gosms.send(ORDER_SMS_TO, _sms_text(claimed))
-        update = {"sms_state": "sent", "sms_error": None}
-    except gosms.GoSmsError as e:
-        # The order stays paid and visible in the admin; the SMS is retried on the next status check.
-        logger.error("Order %s SMS failed: %s", claimed["ref"], e)
-        update = {"sms_state": "error", "sms_error": str(e)}
-    return await db.orders.find_one_and_update({"ref": claimed["ref"]}, {"$set": update}, return_document=True)
+        await send(claimed)
+        update = {f"{key}_state": "sent", f"{key}_error": None}
+    except (gosms.GoSmsError, mailer.MailError) as e:
+        # The order stays valid and visible in the admin.
+        logger.error("Order %s %s failed: %s", ref, key, e)
+        update = {f"{key}_state": "error", f"{key}_error": str(e)}
+    await db.orders.update_one({"ref": ref}, {"$set": update})
+
+
+async def _notify(doc: dict) -> dict:
+    if doc.get("sms_state") != "sent":
+        await _deliver(doc["ref"], "sms", _send_sms)
+    if doc.get("mail_state") != "sent":
+        await _deliver(doc["ref"], "mail", _send_mail)
+    return await db.orders.find_one({"ref": doc["ref"]})
 
 
 async def _confirm(doc: dict) -> dict:
@@ -220,7 +287,7 @@ async def _confirm(doc: dict) -> dict:
         if update:
             doc = await db.orders.find_one_and_update({"ref": doc["ref"], "status": "pending"}, {"$set": update}, return_document=True) \
                 or await db.orders.find_one({"ref": doc["ref"]})
-    if doc["status"] == "paid" and doc.get("sms_state") != "sent":
+    if doc["status"] in CONFIRMED and (doc.get("sms_state") != "sent" or doc.get("mail_state") != "sent"):
         doc = await _notify(doc)
     return doc
 
@@ -229,25 +296,38 @@ async def _confirm(doc: dict) -> dict:
 async def ordering_status():
     s = await _settings()
     slots = _slots(s) if s["enabled"] else []
-    return {"accepting": bool(s["enabled"] and slots and teya.configured()), "enabled": s["enabled"], "slots": slots,
-            "open": s["open"], "close": s["close"]}
+    card, store = teya.configured(), s["pay_store"]
+    return {"accepting": bool(s["enabled"] and slots and (card or store)), "enabled": s["enabled"], "slots": slots,
+            "card": card, "store": store, "open": s["open"], "close": s["close"]}
 
 
 @router.post("/orders/start")
-async def start_order(body: OrderStart, request: Request):
-    if not teya.configured():
-        raise HTTPException(status_code=503, detail="payments_not_configured")
+async def start_order(body: OrderStart, request: Request, background: BackgroundTasks):
     s = await _settings()
+    store = body.payment == "store"
+    if store and not s["pay_store"]:
+        raise HTTPException(status_code=409, detail="pay_store_off")
+    if not store and not teya.configured():
+        raise HTTPException(status_code=503, detail="payments_not_configured")
     if not s["enabled"]:
         raise HTTPException(status_code=409, detail="ordering_closed")
     if body.pickup not in _slots(s):
         raise HTTPException(status_code=409, detail="pickup_unavailable")
     lines, total = await _price(body.lines)
-    site = _site_url(request)
+    today = datetime.now(PRAGUE).date().isoformat()
+    if store and await db.orders.count_documents({"date": today, "phone": body.phone, "payment": "store", "status": "confirmed"}) >= STORE_ORDERS_PER_PHONE:
+        raise HTTPException(status_code=429, detail="too_many_orders")
+    site = None if store else _site_url(request)
     ref = await _new_ref()
-    doc = {"ref": ref, "status": "pending", "created_at": datetime.now(timezone.utc), "date": datetime.now(PRAGUE).date().isoformat(),
+    doc = {"ref": ref, "status": "pending", "payment": body.payment, "created_at": datetime.now(timezone.utc), "date": today,
            "pickup": body.pickup, "name": body.name, "phone": body.phone, "email": body.email, "note": body.note, "lang": body.lang,
-           "lines": lines, "total": total, "sms_state": None}
+           "lines": lines, "total": total, "sms_state": None, "mail_state": None}
+    if store:
+        # Nothing to pay online: the order counts straight away and the kitchen and customer are told in the background.
+        doc.update(status="confirmed", number=await _next_number(today))
+        await db.orders.insert_one(doc)
+        background.add_task(_notify, doc)
+        return {"ref": ref, "payment": "store"}
     await db.orders.insert_one(doc)
 
     done = f"{site}{'/en/order/done/' if body.lang == 'en' else '/objednavka/hotovo/'}?ref={ref}"
@@ -305,14 +385,14 @@ async def teya_webhook(request: Request, background: BackgroundTasks):
 @router.get("/admin/orders")
 async def admin_orders(date: Optional[str] = None, _: User = Depends(get_current_user)):
     day = date or datetime.now(PRAGUE).date().isoformat()
-    docs = await db.orders.find({"date": day, "status": {"$in": ["paid", "done"]}}).sort([("pickup", 1), ("number", 1)]).to_list(500)
+    docs = await db.orders.find({"date": day, "status": {"$in": [*CONFIRMED, "done"]}}).sort([("pickup", 1), ("number", 1)]).to_list(500)
     return {"date": day, "orders": [{**_public(d), "phone": d["phone"], "email": d["email"], "note": d.get("note") or "",
-                                     "sms_state": d.get("sms_state")} for d in docs]}
+                                     "sms_state": d.get("sms_state"), "mail_state": d.get("mail_state")} for d in docs]}
 
 
 @router.put("/admin/orders/{ref}/done")
 async def admin_order_done(ref: str, _: User = Depends(get_current_user)):
-    res = await db.orders.update_one({"ref": ref, "status": {"$in": ["paid", "done"]}}, {"$set": {"status": "done"}})
+    res = await db.orders.update_one({"ref": ref, "status": {"$in": [*CONFIRMED, "done"]}}, {"$set": {"status": "done"}})
     if not res.matched_count:
         raise HTTPException(status_code=404, detail="Không tìm thấy đơn hàng.")
     return {"ok": True}
@@ -321,8 +401,8 @@ async def admin_order_done(ref: str, _: User = Depends(get_current_user)):
 @router.get("/admin/ordering")
 async def admin_get_ordering(_: User = Depends(get_current_user)):
     s = await _settings()
-    return {**{k: s[k] for k in ("enabled", "open", "close", "lead_minutes")}, "payments": teya.configured(),
-            "sms": gosms.configured() and bool(ORDER_SMS_TO)}
+    return {**{k: s[k] for k in ("enabled", "pay_store", "open", "close", "lead_minutes")}, "payments": teya.configured(),
+            "sms": gosms.configured() and bool(ORDER_SMS_TO), "mail": mailer.configured()}
 
 
 @router.put("/admin/ordering")

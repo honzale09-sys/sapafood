@@ -2,7 +2,7 @@ export const SITE = {
   name: "Sapa Food",
   phone: "+420 774 994 679",
   phoneHref: "tel:+420774994679",
-  email: "info@sapa-food.cz",
+  email: "lecongdiencz@gmail.com",
   street: "Vodičkova 699/28",
   city: "110 00 Praha 1",
   country: { cs: "Česká republika", en: "Czech Republic" },

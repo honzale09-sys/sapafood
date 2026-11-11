@@ -7,8 +7,10 @@ import { api } from "../lib/api";
 import { ROUTES, T, pick, formatPrice } from "../lib/i18n";
 
 // Teya sends the customer back here; the server confirms the payment with Teya before reporting "paid".
+// Orders paid at pickup arrive here already "confirmed".
 const POLL_MS = 2000;
 const POLL_TRIES = 30;
+const OK = ["paid", "confirmed", "done"];
 
 export default function OrderDonePage() {
   const lang = useLang();
@@ -29,7 +31,7 @@ export default function OrderDonePage() {
         const { data } = await api.get(`/orders/status/${encodeURIComponent(ref)}`);
         if (!alive) return;
         setOrder(data);
-        if (data.status === "paid" || data.status === "done") {
+        if (OK.includes(data.status)) {
           clear();
           return;
         }
@@ -48,7 +50,8 @@ export default function OrderDonePage() {
   }, [ref]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const status = order?.status;
-  const paid = status === "paid" || status === "done";
+  const paid = OK.includes(status);
+  const atPickup = order?.payment === "store";
   const failed = status === "failed" || status === "expired";
 
   return (
@@ -56,7 +59,7 @@ export default function OrderDonePage() {
       {paid ? (
         <>
           <CheckCircle2 size={44} className="mx-auto text-herb" />
-          <h1 className="mt-5 font-display text-4xl leading-tight sm:text-5xl">{t.paidTitle}</h1>
+          <h1 className="mt-5 font-display text-4xl leading-tight sm:text-5xl">{atPickup ? t.confirmedTitle : t.paidTitle}</h1>
           <p className="mt-4 text-tamarind/70">
             {t.paidText} <strong className="text-tamarind">{order.pickup}</strong>.
           </p>
@@ -74,6 +77,10 @@ export default function OrderDonePage() {
               <span className="font-mono text-lacquer">{formatPrice(order.total)}</span>
             </li>
           </ul>
+          {atPickup && (
+            <p className="mt-4 font-medium" data-testid="order-done-pay-at-pickup">{t.payAtPickup}: <span className="font-mono text-lacquer">{formatPrice(order.total)}</span></p>
+          )}
+          {order.mail && <p className="mt-4 text-sm text-tamarind/70">{t.mailSent}</p>}
           <p className="mt-6 text-sm text-tamarind/60">{t.address}</p>
           <Link to={ROUTES.home[lang]} className="mt-8 inline-flex h-11 items-center rounded-full border border-tamarind/25 px-6 text-sm">{t.backHome}</Link>
         </>
