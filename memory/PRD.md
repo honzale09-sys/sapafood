@@ -29,6 +29,11 @@ Custom JWT (httpOnly cookie) auth; Emergent Object Storage for admin uploads; sc
 - Full-length encodes, no audio, 30 fps: hero.mp4 1080p 14 MB, hero.webm 1080p 12 MB, hero-720.mp4 5.5 MB, hero-720.webm 4.9 MB; poster = frame at 1.2 s.
 - Wired via src/config/hero.js; phones load only the 720p files (JS width detection).
 
+## Online ordering patch (2026-11-11)
+- Applied owner's online-ordering.patch (git apply --3way, all 30 files clean): ordering.py, teya_client.py, gosms.py, order/terms/privacy pages CZ+EN, CartContext/CartBar, Vietnamese admin + "Đơn hàng" tab, Vietnamese admin/auth errors.
+- httpx added. Tests updated for Vietnamese messages (30/30 pass).
+- Pending: TEYA_* / GOSMS_* / ORDER_SMS_TO secrets in backend/.env → then accepting=true.
+
 ## Needs owner review
 - Story/about text (neutral food text, not from site), category names (site had none), featured dish selection, EN names/descriptions with typos copied from the site.
 
