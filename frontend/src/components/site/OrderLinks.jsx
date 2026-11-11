@@ -1,7 +1,8 @@
-import { ChevronDown, ArrowUpRight } from "lucide-react";
+import { ChevronDown, ArrowUpRight, ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 import { SITE } from "../../config/site";
-import { T } from "../../lib/i18n";
+import { ROUTES, T } from "../../lib/i18n";
 
 const PROVIDERS = [
   { key: "wolt", name: "Wolt", href: SITE.wolt },
@@ -23,6 +24,15 @@ export const OrderMenu = ({ lang, testId, variant = "solid", label }) => {
         {label || t.order} <ChevronDown size={16} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="z-[70] min-w-[200px] rounded-xl border-tamarind/15 bg-paper p-1.5">
+        <DropdownMenuItem asChild>
+          <Link
+            to={ROUTES.menu[lang]}
+            data-testid={`${testId}-online`}
+            className="flex cursor-pointer items-center justify-between rounded-lg bg-sand px-3 py-3 text-[15px] font-medium text-lacquer"
+          >
+            {t.orderOnline} <ShoppingBag size={16} />
+          </Link>
+        </DropdownMenuItem>
         {PROVIDERS.map((p) => (
           <DropdownMenuItem key={p.key} asChild>
             <a

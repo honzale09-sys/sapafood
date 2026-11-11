@@ -1,11 +1,12 @@
 import { NavLink, Outlet, Link } from "react-router-dom";
-import { CalendarDays, BookOpen, KeyRound, LogOut, ExternalLink } from "lucide-react";
+import { CalendarDays, BookOpen, KeyRound, LogOut, ExternalLink, ShoppingBag } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 const TABS = [
-  { to: "/admin/denni-menu", label: "Denní menu", icon: CalendarDays, id: "daily" },
-  { to: "/admin/menu", label: "Jídelní lístek", icon: BookOpen, id: "menu" },
-  { to: "/admin/heslo", label: "Heslo", icon: KeyRound, id: "password" },
+  { to: "/admin/objednavky", label: "Đơn hàng", icon: ShoppingBag, id: "orders" },
+  { to: "/admin/denni-menu", label: "Thực đơn ngày", icon: CalendarDays, id: "daily" },
+  { to: "/admin/menu", label: "Thực đơn", icon: BookOpen, id: "menu" },
+  { to: "/admin/heslo", label: "Mật khẩu", icon: KeyRound, id: "password" },
 ];
 
 export default function AdminLayout() {
@@ -26,9 +27,9 @@ export default function AdminLayout() {
             ))}
           </nav>
           <div className="flex items-center gap-1">
-            <Link to="/" target="_blank" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-sand" title="Zobrazit web" data-testid="admin-view-site"><ExternalLink size={18} /></Link>
+            <Link to="/" target="_blank" className="flex h-11 w-11 items-center justify-center rounded-full hover:bg-sand" title="Xem trang web" data-testid="admin-view-site"><ExternalLink size={18} /></Link>
             <button type="button" onClick={logout} className="flex h-11 items-center gap-2 rounded-full px-3 text-sm hover:bg-sand" data-testid="admin-logout-button">
-              <LogOut size={18} /> <span className="hidden sm:inline">Odhlásit</span>
+              <LogOut size={18} /> <span className="hidden sm:inline">Đăng xuất</span>
             </button>
           </div>
         </div>

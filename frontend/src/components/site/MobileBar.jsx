@@ -19,16 +19,10 @@ export const MobileBar = ({ lang }) => {
         <Phone size={20} strokeWidth={1.6} />
         {t.call}
       </a>
-      <a
-        href={SITE.wolt}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="mobile-sticky-wolt-button"
-        className={`${item} flex-[1.6] bg-lacquer text-paper`}
-      >
+      <Link to={ROUTES.menu[lang]} data-testid="mobile-sticky-order-button" className={`${item} flex-[1.6] bg-lacquer text-paper`}>
         <ShoppingBag size={20} strokeWidth={1.6} />
-        {t.orderVia} Wolt
-      </a>
+        {t.orderOnline}
+      </Link>
     </nav>
   );
 };

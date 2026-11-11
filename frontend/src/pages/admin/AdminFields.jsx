@@ -4,7 +4,7 @@ export const AllergenPicker = ({ value = [], onChange, testPrefix }) => {
   const toggle = (n) => onChange(value.includes(n) ? value.filter((x) => x !== n) : [...value, n].sort((a, b) => a - b));
   return (
     <div className="grid grid-cols-7 gap-1.5" data-testid={`${testPrefix}-allergen-picker`}>
-      {ALLERGENS.cs.map((label, i) => {
+      {ALLERGENS.vi.map((label, i) => {
         const n = i + 1;
         const on = value.includes(n);
         return (

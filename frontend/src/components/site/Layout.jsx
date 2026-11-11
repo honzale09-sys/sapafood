@@ -4,6 +4,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { MobileBar } from "./MobileBar";
 import { Seo } from "./Seo";
+import { CartBar } from "./CartBar";
 
 export const useLang = () => useOutletContext().lang;
 
@@ -29,6 +30,7 @@ export default function Layout({ lang }) {
       </main>
       <Footer lang={lang} />
       <MobileBar lang={lang} />
+      <CartBar lang={lang} />
     </div>
   );
 }
