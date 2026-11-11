@@ -21,18 +21,18 @@ const ItemRow = ({ it, i, count, onEdit, onToggle, onMove, onDelete }) => (
     <button type="button" onClick={onEdit} className="min-w-0 flex-1 text-left" data-testid={`admin-item-edit-${it.id}`}>
       <p className="truncate font-medium"><span className="font-mono text-xs text-lacquer">{it.number}</span> {it.name}</p>
       <p className="font-mono text-xs text-tamarind/60">
-        {it.price != null ? formatPrice(it.price) : `${it.variants.length} variant`}
-        {!it.visible && " · skryto"}
+        {it.price != null ? formatPrice(it.price) : `${it.variants.length} loại`}
+        {!it.visible && " · đang ẩn"}
       </p>
     </button>
     <div className="flex items-center gap-1">
-      <Switch checked={it.visible} onCheckedChange={onToggle} aria-label="Viditelné" data-testid={`admin-item-visible-${it.id}`} />
+      <Switch checked={it.visible} onCheckedChange={onToggle} aria-label="Hiển thị" data-testid={`admin-item-visible-${it.id}`} />
       <div className="hidden flex-col sm:flex">
-        <button type="button" disabled={i === 0} onClick={() => onMove(-1)} className="p-1 disabled:opacity-20" aria-label="Nahoru" data-testid={`admin-item-up-${it.id}`}><ArrowUp size={16} /></button>
-        <button type="button" disabled={i === count - 1} onClick={() => onMove(1)} className="p-1 disabled:opacity-20" aria-label="Dolů" data-testid={`admin-item-down-${it.id}`}><ArrowDown size={16} /></button>
+        <button type="button" disabled={i === 0} onClick={() => onMove(-1)} className="p-1 disabled:opacity-20" aria-label="Lên" data-testid={`admin-item-up-${it.id}`}><ArrowUp size={16} /></button>
+        <button type="button" disabled={i === count - 1} onClick={() => onMove(1)} className="p-1 disabled:opacity-20" aria-label="Xuống" data-testid={`admin-item-down-${it.id}`}><ArrowDown size={16} /></button>
       </div>
-      <button type="button" onClick={onEdit} className="hidden h-10 w-10 items-center justify-center rounded-full hover:bg-sand sm:flex" aria-label="Upravit"><Pencil size={16} /></button>
-      <button type="button" onClick={onDelete} className="flex h-10 w-10 items-center justify-center rounded-full text-lacquer hover:bg-lacquer/10" aria-label="Smazat" data-testid={`admin-item-delete-${it.id}`}><Trash2 size={16} /></button>
+      <button type="button" onClick={onEdit} className="hidden h-10 w-10 items-center justify-center rounded-full hover:bg-sand sm:flex" aria-label="Sửa"><Pencil size={16} /></button>
+      <button type="button" onClick={onDelete} className="flex h-10 w-10 items-center justify-center rounded-full text-lacquer hover:bg-lacquer/10" aria-label="Xóa" data-testid={`admin-item-delete-${it.id}`}><Trash2 size={16} /></button>
     </div>
   </li>
 );
@@ -57,7 +57,7 @@ export default function AdminMenu() {
     try {
       await api.patch(`/admin/items/${it.id}/visibility`, { visible });
       setItems((xs) => xs.map((x) => (x.id === it.id ? { ...x, visible } : x)));
-      toast.success(visible ? "Položka je viditelná na webu." : "Položka je skrytá.");
+      toast.success(visible ? "Món đang hiển thị trên web." : "Món đã bị ẩn.");
     } catch (e) { toast.error(errMsg(e)); }
   };
 
@@ -70,10 +70,10 @@ export default function AdminMenu() {
   };
 
   const del = async (it) => {
-    if (!window.confirm(`Smazat „${it.name}“?`)) return;
+    if (!window.confirm(`Xóa „${it.name}“?`)) return;
     try {
       await api.delete(`/admin/items/${it.id}`);
-      toast.success("Položka smazána.");
+      toast.success("Đã xóa món.");
       load();
     } catch (e) { toast.error(errMsg(e)); }
   };
@@ -82,11 +82,11 @@ export default function AdminMenu() {
     <div className="space-y-8" data-testid="admin-menu-page">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl">Jídelní lístek</h1>
-          <p className="mt-1 text-sm text-tamarind/60">Změny se na webu projeví okamžitě.</p>
+          <h1 className="font-display text-3xl">Thực đơn</h1>
+          <p className="mt-1 text-sm text-tamarind/60">Thay đổi hiện trên web ngay lập tức.</p>
         </div>
         <button type="button" onClick={() => setEditing({})} disabled={!cats.length} className="flex h-12 items-center gap-2 rounded-full bg-lacquer px-5 font-medium text-paper disabled:opacity-50" data-testid="admin-menu-add-item-button">
-          <Plus size={18} /> Přidat jídlo
+          <Plus size={18} /> Thêm món
         </button>
       </div>
 
@@ -104,7 +104,7 @@ export default function AdminMenu() {
                 ))}
               </ul>
             ) : (
-              <p className="rounded-2xl border border-dashed border-tamarind/20 p-4 text-sm text-tamarind/50">Zatím žádná jídla.</p>
+              <p className="rounded-2xl border border-dashed border-tamarind/20 p-4 text-sm text-tamarind/50">Chưa có món nào.</p>
             )}
           </section>
         );

@@ -85,7 +85,7 @@ class TestAuth:
         # use a non-real email to avoid locking admin
         r = anon.post(f"{API}/auth/login", json={"email": "noone@sapa-food.cz", "password": "wrong"})
         assert r.status_code == 401
-        assert "Nesprávný" in r.json()["detail"]
+        assert "Sai email" in r.json()["detail"]
 
     def test_admin_login_and_me(self, admin):
         r = admin.get(f"{API}/auth/me")
@@ -146,13 +146,13 @@ class TestDailyMenuFlow:
         r = admin.put(f"{API}/admin/daily-menus/2000-01-01",
                       json={"published": False, "items": [{"name": "", "price": 50, "allergens": []}]})
         assert r.status_code == 422
-        assert "název" in r.json()["detail"].lower() or "povinný" in r.json()["detail"].lower()
+        assert "tên" in r.json()["detail"].lower() or "bắt buộc" in r.json()["detail"].lower()
 
     def test_daily_validation_zero_price(self, admin):
         r = admin.put(f"{API}/admin/daily-menus/2000-01-01",
                       json={"published": False, "items": [{"name": "X", "price": 0, "allergens": []}]})
         assert r.status_code == 422
-        assert "cena" in r.json()["detail"].lower()
+        assert "giá" in r.json()["detail"].lower()
 
     def test_daily_non_int_price(self, admin):
         r = admin.put(f"{API}/admin/daily-menus/2000-01-01",
@@ -216,7 +216,7 @@ class TestItemAndUpload:
         files = {"file": ("test.txt", b"hello world", "text/plain")}
         r = admin.post(f"{API}/admin/upload", files=files)
         assert r.status_code == 415
-        assert "podporovan" in r.json()["detail"].lower() or "formát" in r.json()["detail"].lower()
+        assert "không hỗ trợ" in r.json()["detail"].lower() or "định dạng" in r.json()["detail"].lower()
 
     def test_upload_too_large(self, admin):
         big = b"\x00" * (5 * 1024 * 1024 + 10)
@@ -248,7 +248,7 @@ class TestCategory:
         assert non_empty
         r = admin.delete(f"{API}/admin/categories/{non_empty['id']}")
         assert r.status_code == 409
-        assert "obsahuje" in r.json()["detail"].lower() or "položky" in r.json()["detail"].lower()
+        assert "còn món" in r.json()["detail"].lower() or "danh mục" in r.json()["detail"].lower()
 
     def test_create_missing_name_422(self, admin):
         r = admin.post(f"{API}/admin/categories", json={"name_cz": "  ", "name_en": ""})

@@ -1,6 +1,8 @@
 import { imgUrl } from "../../lib/api";
 import { T, pick, formatPrice } from "../../lib/i18n";
-import { Leaf } from "lucide-react";
+import { Leaf, Plus } from "lucide-react";
+import { toast } from "sonner";
+import { useCart } from "../../context/CartContext";
 
 export const AllergenChips = ({ list, testPrefix }) =>
   list?.length ? (
@@ -33,9 +35,27 @@ const DietBadges = ({ item, lang }) => (
   </>
 );
 
+const AddButton = ({ onClick, label, testId }) => (
+  <button
+    type="button"
+    onClick={onClick}
+    data-testid={testId}
+    aria-label={label}
+    className="inline-flex h-9 shrink-0 items-center gap-1 rounded-full bg-lacquer px-3 text-xs font-medium text-paper transition-colors hover:bg-lacquer-dark"
+  >
+    <Plus size={14} /> {label}
+  </button>
+);
+
 export const DishCard = ({ item, lang }) => {
   const name = pick(lang, item.name, item.name_en);
   const desc = pick(lang, item.desc_cz, item.desc_en);
+  const cart = useCart();
+  const canOrder = cart?.ordering?.accepting;
+  const add = (variant = null) => {
+    cart.add(item, variant);
+    toast.success(T[lang].cart.added, { description: name, duration: 1800 });
+  };
   return (
     <article data-testid={`menu-item-card-${item.id}`} className="group flex flex-col rounded-2xl border border-tamarind/10 bg-sand/60 p-5 transition-[background-color,box-shadow] duration-300 hover:bg-sand hover:shadow-[0_12px_40px_-16px_rgba(62,35,25,0.25)] sm:p-6">
       <div className="relative -mx-2 mb-4 flex aspect-[4/3] items-center justify-center">
@@ -66,6 +86,7 @@ export const DishCard = ({ item, lang }) => {
               <AllergenChips list={v.allergens} testPrefix={`variant-${item.id}-${i}`} />
               <span className="dotted-leader" />
               <span className="font-mono text-[13px] text-lacquer">{formatPrice(v.price)}</span>
+              {canOrder && <AddButton onClick={() => add(i)} label={T[lang].cart.add} testId={`add-${item.id}-${i}`} />}
             </li>
           ))}
         </ul>
@@ -73,6 +94,11 @@ export const DishCard = ({ item, lang }) => {
       <div className="mt-auto flex flex-wrap items-center gap-2 pt-4">
         <DietBadges item={item} lang={lang} />
         <AllergenChips list={item.allergens} testPrefix={`menu-item-${item.id}`} />
+        {canOrder && item.price != null && !item.variants?.length && (
+          <span className="ml-auto">
+            <AddButton onClick={() => add()} label={T[lang].cart.add} testId={`add-${item.id}`} />
+          </span>
+        )}
       </div>
     </article>
   );

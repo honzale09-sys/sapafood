@@ -25,7 +25,7 @@ def oid(value: str) -> ObjectId:
     try:
         return ObjectId(value)
     except (InvalidId, TypeError):
-        raise HTTPException(404, "Záznam nenalezen.")
+        raise HTTPException(404, "Không tìm thấy dữ liệu.")
 
 
 def check_date(d: str) -> str:
@@ -34,29 +34,29 @@ def check_date(d: str) -> str:
             raise ValueError
         date.fromisoformat(d)
     except ValueError:
-        raise HTTPException(422, "Neplatné datum (očekává se RRRR-MM-DD).")
+        raise HTTPException(422, "Ngày không hợp lệ (định dạng NNNN-TT-NN).")
     return d
 
 
 def check_allergens(values, errs, label="Alergeny"):
     if any(a < 1 or a > 14 for a in values):
-        errs.append(f"{label} musí být čísla 1–14.")
+        errs.append(f"{label}: chỉ được là số 1–14.")
 
 
 def validate_item(body: MenuItemIn):
     errs = []
     body.name = body.name.strip()
     if not body.name:
-        errs.append("Název (CZ) je povinný.")
+        errs.append("Tên món (tiếng Séc) là bắt buộc.")
     if body.price is not None and body.price <= 0:
-        errs.append("Cena musí být kladné celé číslo.")
+        errs.append("Giá phải là số nguyên dương.")
     if body.price is None and not body.variants:
-        errs.append("Zadejte cenu, nebo přidejte alespoň jednu variantu.")
+        errs.append("Hãy nhập giá hoặc thêm ít nhất một loại.")
     for v in body.variants:
         if not v.label_cz.strip():
-            errs.append("Každá varianta musí mít název.")
+            errs.append("Mỗi loại phải có tên.")
         if v.price <= 0:
-            errs.append("Cena varianty musí být kladné celé číslo.")
+            errs.append("Giá của loại phải là số nguyên dương.")
         check_allergens(v.allergens, errs, "Alergeny varianty")
     check_allergens(body.allergens, errs)
     if errs:
@@ -69,13 +69,13 @@ def validate_daily(body: DailyMenuIn):
     for idx, it in enumerate(body.items, 1):
         it.name = it.name.strip()
         if not it.name:
-            errs.append(f"Položka {idx}: název je povinný.")
+            errs.append(f"Món {idx}: tên là bắt buộc.")
         if it.price <= 0:
-            errs.append(f"Položka {idx}: cena musí být kladné celé číslo.")
-        check_allergens(it.allergens, errs, f"Položka {idx}: alergeny")
+            errs.append(f"Món {idx}: giá phải là số nguyên dương.")
+        check_allergens(it.allergens, errs, f"Món {idx}: chất gây dị ứng")
         it.allergens = sorted(set(it.allergens))
     if body.published and not body.items:
-        errs.append("Nelze zveřejnit prázdné menu – přidejte alespoň jednu položku.")
+        errs.append("Không thể đăng thực đơn trống – hãy thêm ít nhất một món.")
     if errs:
         raise HTTPException(422, " ".join(errs))
 
@@ -94,7 +94,7 @@ async def list_categories():
 @router.post("/categories", response_model=Category)
 async def create_category(body: CategoryIn):
     if not body.name_cz.strip():
-        raise HTTPException(422, "Název kategorie (CZ) je povinný.")
+        raise HTTPException(422, "Tên danh mục (tiếng Séc) là bắt buộc.")
     last = await db.categories.find_one(sort=[("sort_order", -1)])
     cat = Category(name_cz=body.name_cz.strip(), name_en=body.name_en.strip(), sort_order=(last["sort_order"] + 1) if last else 0)
     res = await db.categories.insert_one(cat.to_mongo())
@@ -105,7 +105,7 @@ async def create_category(body: CategoryIn):
 @router.put("/categories/{cid}", response_model=Category)
 async def update_category(cid: str, body: CategoryIn):
     if not body.name_cz.strip():
-        raise HTTPException(422, "Název kategorie (CZ) je povinný.")
+        raise HTTPException(422, "Tên danh mục (tiếng Séc) là bắt buộc.")
     res = await db.categories.find_one_and_update(
         {"_id": oid(cid)}, {"$set": {"name_cz": body.name_cz.strip(), "name_en": body.name_en.strip()}}, return_document=True)
     if not res:
@@ -116,7 +116,7 @@ async def update_category(cid: str, body: CategoryIn):
 @router.delete("/categories/{cid}")
 async def delete_category(cid: str):
     if await db.menu_items.count_documents({"category_id": cid}):
-        raise HTTPException(409, "Kategorie obsahuje položky. Nejprve je smažte nebo přesuňte do jiné kategorie.")
+        raise HTTPException(409, "Danh mục còn món. Hãy xóa hoặc chuyển các món sang danh mục khác trước.")
     res = await db.categories.delete_one({"_id": oid(cid)})
     if not res.deleted_count:
         raise HTTPException(404, "Kategorie nenalezena.")
@@ -138,7 +138,7 @@ async def list_items():
 
 async def _ensure_category(cid: str):
     if not await db.categories.find_one({"_id": oid(cid)}):
-        raise HTTPException(422, "Vyberte existující kategorii.")
+        raise HTTPException(422, "Hãy chọn danh mục có sẵn.")
 
 
 @router.post("/items", response_model=MenuItem)
@@ -158,7 +158,7 @@ async def update_item(iid: str, body: MenuItemIn):
     await _ensure_category(body.category_id)
     res = await db.menu_items.find_one_and_update({"_id": oid(iid)}, {"$set": body.model_dump()}, return_document=True)
     if not res:
-        raise HTTPException(404, "Položka nenalezena.")
+        raise HTTPException(404, "Không tìm thấy món.")
     return MenuItem.from_mongo(res)
 
 
@@ -166,7 +166,7 @@ async def update_item(iid: str, body: MenuItemIn):
 async def set_visibility(iid: str, body: VisibilityIn):
     res = await db.menu_items.find_one_and_update({"_id": oid(iid)}, {"$set": {"visible": body.visible}}, return_document=True)
     if not res:
-        raise HTTPException(404, "Položka nenalezena.")
+        raise HTTPException(404, "Không tìm thấy món.")
     return MenuItem.from_mongo(res)
 
 
@@ -174,7 +174,7 @@ async def set_visibility(iid: str, body: VisibilityIn):
 async def delete_item(iid: str):
     res = await db.menu_items.delete_one({"_id": oid(iid)})
     if not res.deleted_count:
-        raise HTTPException(404, "Položka nenalezena.")
+        raise HTTPException(404, "Không tìm thấy món.")
     return {"ok": True}
 
 
@@ -190,19 +190,19 @@ async def order_items(body: OrderIn):
 async def upload(file: UploadFile = File(...)):
     data = await file.read()
     if len(data) > MAX_UPLOAD:
-        raise HTTPException(413, "Obrázek je příliš velký (max. 5 MB).")
+        raise HTTPException(413, "Ảnh quá lớn (tối đa 5 MB).")
     try:
         fmt = Image.open(io.BytesIO(data)).format
     except Exception:
         fmt = None
     if fmt not in IMAGE_TYPES:
-        raise HTTPException(415, "Nepodporovaný formát. Povolené jsou JPG, PNG a WEBP.")
+        raise HTTPException(415, "Định dạng không hỗ trợ. Chỉ nhận JPG, PNG và WEBP.")
     ctype, ext = IMAGE_TYPES[fmt]
     path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
     try:
         result = await run_in_threadpool(put_object, path, data, ctype)
     except Exception:
-        raise HTTPException(502, "Nahrání obrázku se nezdařilo. Zkuste to prosím znovu.")
+        raise HTTPException(502, "Tải ảnh lên không thành công. Vui lòng thử lại.")
     await db.files.insert_one({
         "storage_path": result["path"], "original_filename": file.filename, "content_type": ctype,
         "size": result.get("size", len(data)), "is_deleted": False, "created_at": datetime.now(timezone.utc).isoformat(),
@@ -227,7 +227,7 @@ async def get_daily(d: str):
 async def previous_daily(d: str):
     doc = await db.daily_menus.find_one({"date": {"$lt": check_date(d)}, "items.0": {"$exists": True}}, sort=[("date", -1)])
     if not doc:
-        raise HTTPException(404, "Žádné předchozí menu k zkopírování.")
+        raise HTTPException(404, "Không có thực đơn trước đó để sao chép.")
     return {"menu": DailyMenu.from_mongo(doc).model_dump()}
 
 

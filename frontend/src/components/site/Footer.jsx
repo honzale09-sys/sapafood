@@ -40,7 +40,11 @@ export const Footer = ({ lang }) => {
           </div>
         </div>
         <div className="mt-16 flex flex-col gap-4 border-t border-paper/10 pt-6 text-xs text-paper/50 sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Sapa Food · {SITE.company}</p>
+          <p>
+            © {new Date().getFullYear()} Sapa Food · {SITE.company} ·{" "}
+            <Link to={ROUTES.terms[lang]} className="hover:text-turmeric" data-testid="footer-terms">{t.cart.terms}</Link> ·{" "}
+            <Link to={ROUTES.privacy[lang]} className="hover:text-turmeric" data-testid="footer-privacy">{t.cart.privacy}</Link>
+          </p>
           <LangSwitch lang={lang} light testPrefix="footer" />
         </div>
       </div>

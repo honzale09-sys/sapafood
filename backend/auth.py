@@ -44,11 +44,11 @@ def _decode(token: str, kind: str) -> dict:
     try:
         payload = jwt.decode(token, os.environ["JWT_SECRET"], algorithms=[JWT_ALGORITHM])
     except jwt.ExpiredSignatureError:
-        raise HTTPException(401, "Přihlášení vypršelo. Přihlaste se prosím znovu.")
+        raise HTTPException(401, "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.")
     except jwt.InvalidTokenError:
-        raise HTTPException(401, "Neplatné přihlášení.")
+        raise HTTPException(401, "Đăng nhập không hợp lệ.")
     if payload.get("type") != kind:
-        raise HTTPException(401, "Neplatné přihlášení.")
+        raise HTTPException(401, "Đăng nhập không hợp lệ.")
     return payload
 
 
@@ -58,11 +58,11 @@ async def get_current_user(request: Request) -> User:
         auth = request.headers.get("Authorization", "")
         token = auth[7:] if auth.startswith("Bearer ") else None
     if not token:
-        raise HTTPException(401, "Nepřihlášen.")
+        raise HTTPException(401, "Chưa đăng nhập.")
     payload = _decode(token, "access")
     doc = await db.users.find_one({"_id": ObjectId(payload["sub"])})
     if not doc:
-        raise HTTPException(401, "Uživatel neexistuje.")
+        raise HTTPException(401, "Người dùng không tồn tại.")
     return User.from_mongo(doc)
 
 
@@ -89,7 +89,7 @@ async def login(body: LoginIn, request: Request, response: Response):
     now = datetime.now(timezone.utc)
     att = await db.login_attempts.find_one({"identifier": ident})
     if att and att.get("locked_until") and datetime.fromisoformat(att["locked_until"]) > now:
-        raise HTTPException(429, "Příliš mnoho neúspěšných pokusů. Zkuste to znovu za 15 minut.")
+        raise HTTPException(429, "Quá nhiều lần thử sai. Vui lòng thử lại sau 15 phút.")
     user = await db.users.find_one({"email": email})
     if not user or not verify_password(body.password, user["password_hash"]):
         count = (att.get("count", 0) if att else 0) + 1
@@ -97,7 +97,7 @@ async def login(body: LoginIn, request: Request, response: Response):
         if count >= MAX_ATTEMPTS:
             upd = {"count": 0, "locked_until": (now + timedelta(minutes=LOCK_MINUTES)).isoformat()}
         await db.login_attempts.update_one({"identifier": ident}, {"$set": upd}, upsert=True)
-        raise HTTPException(401, "Nesprávný e-mail nebo heslo.")
+        raise HTTPException(401, "Sai email hoặc mật khẩu.")
     await db.login_attempts.delete_one({"identifier": ident})
     _set_cookies(response, str(user["_id"]), email)
     return User.from_mongo(user)
@@ -107,11 +107,11 @@ async def login(body: LoginIn, request: Request, response: Response):
 async def refresh(request: Request, response: Response):
     token = request.cookies.get("refresh_token")
     if not token:
-        raise HTTPException(401, "Nepřihlášen.")
+        raise HTTPException(401, "Chưa đăng nhập.")
     payload = _decode(token, "refresh")
     user = await db.users.find_one({"_id": ObjectId(payload["sub"])})
     if not user:
-        raise HTTPException(401, "Uživatel neexistuje.")
+        raise HTTPException(401, "Người dùng không tồn tại.")
     _set_cookies(response, str(user["_id"]), user["email"])
     return {"ok": True}
 
@@ -132,8 +132,8 @@ async def me(user: User = Depends(get_current_user)):
 async def change_password(body: ChangePasswordIn, user: User = Depends(get_current_user)):
     doc = await db.users.find_one({"_id": ObjectId(user.id)})
     if not verify_password(body.current_password, doc["password_hash"]):
-        raise HTTPException(400, "Současné heslo není správné.")
+        raise HTTPException(400, "Mật khẩu hiện tại không đúng.")
     if len(body.new_password) < 8:
-        raise HTTPException(422, "Nové heslo musí mít alespoň 8 znaků.")
+        raise HTTPException(422, "Mật khẩu mới phải có ít nhất 8 ký tự.")
     await db.users.update_one({"_id": doc["_id"]}, {"$set": {"password_hash": hash_password(body.new_password)}})
     return {"ok": True}
