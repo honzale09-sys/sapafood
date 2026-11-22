@@ -33,7 +33,7 @@ export default function DailyMenuPage() {
             <DailyItems menu={menu} lang={lang} />
           </>
         ) : (
-          <DailyEmpty lang={lang} />
+          <DailyEmpty lang={lang} today={today} />
         )}
         <div className="mt-20"><AllergenLegend lang={lang} /></div>
       </div>

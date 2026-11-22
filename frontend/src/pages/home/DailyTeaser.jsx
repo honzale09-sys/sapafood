@@ -24,7 +24,7 @@ export const DailyTeaser = ({ lang }) => {
           </Link>
         </Reveal>
         <Reveal className="md:col-span-7" delay={150}>
-          {loading ? <div className="h-48 animate-pulse rounded-3xl bg-paper/5" /> : menu ? <DailyItems menu={menu} lang={lang} dark /> : <DailyEmpty lang={lang} dark />}
+          {loading ? <div className="h-48 animate-pulse rounded-3xl bg-paper/5" /> : menu ? <DailyItems menu={menu} lang={lang} dark /> : <DailyEmpty lang={lang} today={today} dark />}
         </Reveal>
       </div>
     </section>

@@ -25,16 +25,23 @@ export const DailyItems = ({ menu, lang, dark = false }) => (
   </ol>
 );
 
-export const DailyEmpty = ({ lang, dark = false }) => (
-  <div data-testid="daily-menu-empty" className={`rounded-3xl border border-dashed p-8 sm:p-12 ${dark ? "border-paper/20" : "border-tamarind/20 bg-sand/50"}`}>
-    <p className="font-display text-2xl sm:text-3xl">{T[lang].dailyEmptyTitle}</p>
-    <p className={`mt-3 max-w-md text-[15px] ${dark ? "text-paper/70" : "text-tamarind/70"}`}>{T[lang].dailyEmptyText}</p>
-    <Link
-      to={ROUTES.menu[lang]}
-      data-testid="daily-menu-empty-menu-link"
-      className={`mt-6 inline-flex h-12 items-center rounded-full px-6 text-sm font-medium transition-colors ${dark ? "bg-paper text-tamarind hover:bg-turmeric" : "bg-lacquer text-paper hover:bg-lacquer-dark"}`}
-    >
-      {T[lang].seeMenu} →
-    </Link>
-  </div>
-);
+// `today` is the restaurant's date (YYYY-MM-DD) from the API; the daily menu is weekdays only.
+const isWeekend = (today) => today && [0, 6].includes(new Date(`${today}T00:00:00Z`).getUTCDay());
+
+export const DailyEmpty = ({ lang, today, dark = false }) => {
+  const t = T[lang];
+  const weekend = isWeekend(today);
+  return (
+    <div data-testid="daily-menu-empty" className={`rounded-3xl border border-dashed p-8 sm:p-12 ${dark ? "border-paper/20" : "border-tamarind/20 bg-sand/50"}`}>
+      <p className="font-display text-2xl sm:text-3xl">{weekend ? t.dailyWeekendTitle : t.dailyEmptyTitle}</p>
+      <p className={`mt-3 max-w-md text-[15px] ${dark ? "text-paper/70" : "text-tamarind/70"}`}>{weekend ? t.dailyWeekendText : t.dailyEmptyText}</p>
+      <Link
+        to={ROUTES.menu[lang]}
+        data-testid="daily-menu-empty-menu-link"
+        className={`mt-6 inline-flex h-12 items-center rounded-full px-6 text-sm font-medium transition-colors ${dark ? "bg-paper text-tamarind hover:bg-turmeric" : "bg-lacquer text-paper hover:bg-lacquer-dark"}`}
+      >
+        {t.seeMenu} →
+      </Link>
+    </div>
+  );
+};
