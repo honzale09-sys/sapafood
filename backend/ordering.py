@@ -1,6 +1,7 @@
 """Online orders for pickup: priced from the menu on the server, paid by card through Teya Hosted Checkout
 or at the counter on pickup. Once an order is confirmed (card payment verified with Teya, or straight away
 when paying at pickup) the restaurant gets an SMS (GoSMS) and the customer a confirmation e-mail (SMTP)."""
+import asyncio
 import html
 import logging
 import os
@@ -32,6 +33,9 @@ PHONE_RE = re.compile(r"^\+?[0-9 ]{9,17}$")
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 HHMM_RE = re.compile(r"^([01]\d|2[0-3]):[0-5]\d$")
 SMS_RETRY_SECONDS = 120
+# A send that was cut off (crash, restart) is taken over after this long; failed sends get a few more tries.
+SENDING_STALE_SECONDS = 600
+MAX_SEND_ATTEMPTS = 5
 # Orders the kitchen should make: paid by card, or placed to be paid at pickup.
 CONFIRMED = ("paid", "confirmed")
 # Unpaid pickup orders cost the kitchen food if nobody comes, so one phone number gets only a few a day.
@@ -221,7 +225,9 @@ def _mail(doc: dict):
                       f"{t['total']}: {price(doc['total'])}", pay, *([f"{t['note']}: {note}"] if note else []), "", t["show"], t["contact"]])
     e = html.escape
     items = "".join(f'<tr><td style="padding:6px 0">{e(a)}</td><td style="padding:6px 0;text-align:right;white-space:nowrap">{e(b)}</td></tr>' for a, b in rows)
-    body = f"""<div style="font-family:Arial,Helvetica,sans-serif;color:#3b2a20;max-width:520px;margin:0 auto;line-height:1.5">
+    # A complete HTML document (doctype, charset, lang): bare fragments score worse with spam filters.
+    body = f"""<!DOCTYPE html><html lang="{'en' if en else 'cs'}"><head><meta charset="utf-8"><title>{e(t['subject'].format(n=doc['number']))}</title></head><body>
+<div style="font-family:Arial,Helvetica,sans-serif;color:#3b2a20;max-width:520px;margin:0 auto;line-height:1.5">
 <p>{e(t['hello'].format(name=doc['name']))}<br>{e(t['intro'])}</p>
 <p style="margin:24px 0 4px;font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#a3312a">{e(t['number'])}</p>
 <p style="margin:0;font-size:40px;font-weight:bold">#{doc['number']}</p>
@@ -230,7 +236,7 @@ def _mail(doc: dict):
 <tr><td style="padding:8px 0;border-top:1px solid #e5dccf"><strong>{e(t['total'])}</strong></td>
 <td style="padding:8px 0;border-top:1px solid #e5dccf;text-align:right"><strong>{e(price(doc['total']))}</strong></td></tr></table>
 <p><strong>{e(pay)}</strong></p>{f"<p>{e(t['note'])}: {e(note)}</p>" if note else ""}
-<p style="color:#6b5a4e">{e(t['show'])}<br>{e(t['contact'])}</p></div>"""
+<p style="color:#6b5a4e">{e(t['show'])}<br>{e(t['contact'])}</p></div></body></html>"""
     return t["subject"].format(n=doc["number"]), text, body
 
 
@@ -246,11 +252,14 @@ async def _send_mail(doc: dict) -> None:
 
 async def _deliver(ref: str, key: str, send) -> None:
     """Sends one message (the restaurant SMS or the customer e-mail) once per order. The state switch is atomic,
-    so a webhook and a poll can't both send it; a failure is retried on a later status check."""
+    so a webhook, a poll and the retry loop can't both send it; a failure is retried by retry_loop()."""
+    now = time.time()
     claimed = await db.orders.find_one_and_update(
-        {"ref": ref, "status": {"$in": list(CONFIRMED)}, "$or": [{f"{key}_state": None},
-                                                                 {f"{key}_state": "error", f"{key}_attempt_at": {"$lt": time.time() - SMS_RETRY_SECONDS}}]},
-        {"$set": {f"{key}_state": "sending", f"{key}_attempt_at": time.time()}},
+        {"ref": ref, "status": {"$in": list(CONFIRMED)}, f"{key}_attempts": {"$not": {"$gte": MAX_SEND_ATTEMPTS}},
+         "$or": [{f"{key}_state": None},
+                 {f"{key}_state": "error", f"{key}_attempt_at": {"$lt": now - SMS_RETRY_SECONDS}},
+                 {f"{key}_state": "sending", f"{key}_attempt_at": {"$lt": now - SENDING_STALE_SECONDS}}]},
+        {"$set": {f"{key}_state": "sending", f"{key}_attempt_at": now}, "$inc": {f"{key}_attempts": 1}},
         return_document=True,
     )
     if not claimed:
@@ -258,19 +267,33 @@ async def _deliver(ref: str, key: str, send) -> None:
     try:
         await send(claimed)
         update = {f"{key}_state": "sent", f"{key}_error": None}
-    except (gosms.GoSmsError, mailer.MailError) as e:
+    except Exception as e:  # noqa: BLE001 - any failure must end as "error", or the message is never retried
         # The order stays valid and visible in the admin.
-        logger.error("Order %s %s failed: %s", ref, key, e)
-        update = {f"{key}_state": "error", f"{key}_error": str(e)}
+        logger.exception("Order %s %s failed", ref, key)
+        update = {f"{key}_state": "error", f"{key}_error": str(e) or type(e).__name__}
     await db.orders.update_one({"ref": ref}, {"$set": update})
 
 
 async def _notify(doc: dict) -> dict:
-    if doc.get("sms_state") != "sent":
-        await _deliver(doc["ref"], "sms", _send_sms)
-    if doc.get("mail_state") != "sent":
-        await _deliver(doc["ref"], "mail", _send_mail)
+    # SMS and e-mail go out side by side, so a slow or failing SMS gateway never holds up the customer's e-mail.
+    await asyncio.gather(
+        *([_deliver(doc["ref"], "sms", _send_sms)] if doc.get("sms_state") != "sent" else []),
+        *([_deliver(doc["ref"], "mail", _send_mail)] if doc.get("mail_state") != "sent" else []),
+    )
     return await db.orders.find_one({"ref": doc["ref"]})
+
+
+async def retry_loop(interval: int = 60) -> None:
+    """Retries SMS and e-mails that failed or were cut off, without waiting for someone to reopen the order page."""
+    while True:
+        await asyncio.sleep(interval)
+        try:
+            since = (datetime.now(PRAGUE) - timedelta(days=1)).date().isoformat()
+            async for doc in db.orders.find({"status": {"$in": list(CONFIRMED)}, "date": {"$gte": since},
+                                             "$or": [{"sms_state": {"$ne": "sent"}}, {"mail_state": {"$ne": "sent"}}]}):
+                await _notify(doc)
+        except Exception:  # noqa: BLE001 - the loop must survive a bad order or a database hiccup
+            logger.exception("Notification retry loop failed")
 
 
 async def _confirm(doc: dict) -> dict:
@@ -400,7 +423,8 @@ async def admin_orders(date: Optional[str] = None, _: User = Depends(get_current
     day = date or datetime.now(PRAGUE).date().isoformat()
     docs = await db.orders.find({"date": day, "status": {"$in": [*CONFIRMED, "done"]}}).sort([("pickup", 1), ("number", 1)]).to_list(500)
     return {"date": day, "orders": [{**_public(d), "phone": d["phone"], "email": d["email"], "note": d.get("note") or "",
-                                     "sms_state": d.get("sms_state"), "mail_state": d.get("mail_state")} for d in docs]}
+                                     "sms_state": d.get("sms_state"), "mail_state": d.get("mail_state"),
+                                     "sms_error": d.get("sms_error"), "mail_error": d.get("mail_error")} for d in docs]}
 
 
 @router.put("/admin/orders/{ref}/done")

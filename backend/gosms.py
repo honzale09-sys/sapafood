@@ -48,13 +48,17 @@ async def _get_token(client: httpx.AsyncClient) -> str:
 async def send(recipients: list, message: str) -> dict:
     if not configured():
         raise GoSmsError("gosms_not_configured")
-    async with httpx.AsyncClient(timeout=20) as client:
-        token = await _get_token(client)
-        resp = await client.post(
-            f"{API_URL}/v1/messages",
-            headers={"Authorization": f"Bearer {token}"},
-            json={"message": plain(message), "recipients": recipients, "channel": int(CHANNEL)},
-        )
+    try:
+        async with httpx.AsyncClient(timeout=20) as client:
+            token = await _get_token(client)
+            resp = await client.post(
+                f"{API_URL}/v1/messages",
+                headers={"Authorization": f"Bearer {token}"},
+                json={"message": plain(message), "recipients": recipients, "channel": int(CHANNEL)},
+            )
+    except httpx.HTTPError as e:
+        logger.error("GoSMS request failed: %r", e)
+        raise GoSmsError(type(e).__name__) from e
     if resp.status_code != 201:
         logger.error("GoSMS send failed %s: %s", resp.status_code, resp.text[:300])
         raise GoSmsError("send_failed")

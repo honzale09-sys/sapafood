@@ -80,7 +80,7 @@ export default function OrderDonePage() {
           {atPickup && (
             <p className="mt-4 font-medium" data-testid="order-done-pay-at-pickup">{t.payAtPickup}: <span className="font-mono text-lacquer">{formatPrice(order.total)}</span></p>
           )}
-          {order.mail && <p className="mt-4 text-sm text-tamarind/70">{t.mailSent}</p>}
+          {order.mail && <p className="mt-4 text-sm text-tamarind/70">{t.mailSent} {t.mailSpam}</p>}
           <p className="mt-6 text-sm text-tamarind/60">{t.address}</p>
           <Link to={ROUTES.home[lang]} className="mt-8 inline-flex h-11 items-center rounded-full border border-tamarind/25 px-6 text-sm">{t.backHome}</Link>
         </>

@@ -4,7 +4,7 @@ import os
 import smtplib
 import ssl
 from email.message import EmailMessage
-from email.utils import formataddr, make_msgid
+from email.utils import formataddr, formatdate, make_msgid
 
 HOST = os.environ.get("SMTP_HOST")
 PORT = int(os.environ.get("SMTP_PORT") or 465)
@@ -42,7 +42,11 @@ async def send(to: str, subject: str, text: str, html: str) -> None:
     msg["Subject"] = subject
     msg["From"] = formataddr(("Sapa Food", FROM))
     msg["To"] = to
+    # smtplib adds no Date header, and spam filters count a missing one against the message.
+    msg["Date"] = formatdate(localtime=True)
     msg["Message-ID"] = make_msgid(domain=FROM.split("@")[-1])
+    # Marks it as an automatic transactional message, so mail servers don't send out-of-office replies to it.
+    msg["Auto-Submitted"] = "auto-generated"
     if REPLY_TO:
         msg["Reply-To"] = REPLY_TO
     msg.set_content(text)

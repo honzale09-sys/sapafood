@@ -124,12 +124,12 @@ export default function AdminOrders() {
                 </div>
                 <div className="flex items-center gap-2">
                   {o.sms_state !== "sent" && (
-                    <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-900" title="Không gửi được SMS">
+                    <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-900" title={`Không gửi được SMS${o.sms_error ? `: ${o.sms_error}` : ""}`}>
                       <MessageSquareWarning size={14} /> chưa gửi SMS
                     </span>
                   )}
                   {o.mail_state !== "sent" && (
-                    <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-900" title="Không gửi được email cho khách">
+                    <span className="flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs text-amber-900" title={`Không gửi được email cho khách${o.mail_error ? `: ${o.mail_error}` : ""}`}>
                       <MailWarning size={14} /> chưa gửi email
                     </span>
                   )}

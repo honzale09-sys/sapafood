@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
 
+import asyncio  # noqa: E402
 import logging  # noqa: E402
 import os  # noqa: E402
 
@@ -73,6 +74,7 @@ app.add_middleware(
 async def startup():
     await seed_content()
     await auth.seed_admin()
+    asyncio.create_task(ordering.retry_loop())
     try:
         await run_in_threadpool(init_storage)
         logger.info("Storage initialized")
