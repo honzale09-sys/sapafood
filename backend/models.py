@@ -1,3 +1,4 @@
+import hashlib
 from typing import Annotated, List, Optional
 from bson import ObjectId
 from pydantic import AliasChoices, BaseModel, BeforeValidator, Field
@@ -62,6 +63,12 @@ class DailyItem(BaseModel):
     desc_en: str = ""
     price: int
     allergens: List[int] = []
+
+
+def daily_item_id(date: str, index: int, name: str, price: int) -> str:
+    """Daily dishes have no _id; this id changes when the dish is edited, so a cart can't order a dish that was replaced."""
+    digest = hashlib.sha1(f"{name}|{price}".encode()).hexdigest()[:8]
+    return f"daily-{date}-{index}-{digest}"
 
 
 class DailyMenuIn(BaseModel):

@@ -20,7 +20,7 @@ import mailer
 import teya_client as teya
 from auth import get_current_user
 from db import db
-from models import User
+from models import User, daily_item_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["orders"])
@@ -130,10 +130,20 @@ def _site_url(request: Request) -> str:
 
 async def _price(lines: List[OrderLine]):
     """Prices come from the menu in the database; the browser only says what and how many."""
-    if not all(ObjectId.is_valid(line.item_id) for line in lines):
+    daily = [line for line in lines if line.item_id.startswith("daily-")]
+    regular = [line for line in lines if not line.item_id.startswith("daily-")]
+    if not all(ObjectId.is_valid(line.item_id) for line in regular):
         raise HTTPException(status_code=409, detail="item_unavailable")
-    ids = [ObjectId(line.item_id) for line in lines]
-    docs = {str(d["_id"]): d for d in await db.menu_items.find({"_id": {"$in": ids}, "visible": True}).to_list(200)}
+    ids = [ObjectId(line.item_id) for line in regular]
+    docs = {str(d["_id"]): d for d in await db.menu_items.find({"_id": {"$in": ids}, "visible": True}).to_list(200)} if ids else {}
+    if daily:
+        # Only today's published daily menu can be ordered; its dishes have no number or variants.
+        today = datetime.now(PRAGUE).date().isoformat()
+        menu = await db.daily_menus.find_one({"date": today, "published": True}) or {}
+        for i, it in enumerate(menu.get("items") or []):
+            docs[daily_item_id(today, i, it["name"], it["price"])] = {"name": it["name"], "price": it["price"]}
+        if any(line.variant is not None for line in daily):
+            raise HTTPException(status_code=409, detail="item_unavailable")
     priced, total = [], 0
     for line in lines:
         item = docs.get(line.item_id)
@@ -179,9 +189,9 @@ def _sms_text(doc: dict) -> str:
     return text + (f"\n\nGhi chú: {doc['note']}" if doc.get("note") else "")
 
 
-async def _next_number(date: str) -> int:
-    """Order numbers start at #1 every day, so the kitchen and the customer can say them out loud."""
-    counter = await db.counters.find_one_and_update({"_id": f"orders-{date}"}, {"$inc": {"n": 1}}, upsert=True, return_document=True)
+async def _next_number() -> int:
+    """Order numbers start at #1 and keep counting up across days, so every confirmed order has its own number."""
+    counter = await db.counters.find_one_and_update({"_id": "orders"}, {"$inc": {"n": 1}}, upsert=True, return_document=True)
     return counter["n"]
 
 
@@ -279,7 +289,7 @@ async def _confirm(doc: dict) -> dict:
         update = None
         if paid:
             update = {"status": "paid", "paid_at": datetime.now(timezone.utc), "teya_transaction_id": s.get("transaction_id"),
-                      "number": await _next_number(doc["date"])}
+                      "number": await _next_number()}
         elif status in ("COMPLETED", "MISMATCH"):
             update = {"status": "failed"}
         elif status == "EXPIRED":
@@ -326,7 +336,7 @@ async def start_order(body: OrderStart, request: Request, background: Background
            "lines": lines, "total": total, "sms_state": None, "mail_state": None}
     if store:
         # Nothing to pay online: the order counts straight away and the kitchen and customer are told in the background.
-        doc.update(status="confirmed", number=await _next_number(today))
+        doc.update(status="confirmed", number=await _next_number())
         await db.orders.insert_one(doc)
         background.add_task(_notify, doc)
         return {"ref": ref, "token": token, "payment": "store"}

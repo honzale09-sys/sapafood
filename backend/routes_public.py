@@ -6,7 +6,7 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import Response
 
 from db import db
-from models import Category, DailyMenu, MenuItem
+from models import Category, DailyMenu, MenuItem, daily_item_id
 from storage import get_object
 
 router = APIRouter(prefix="/api", tags=["public"])
@@ -45,7 +45,12 @@ async def daily_today():
     today = prague_today()
     doc = await db.daily_menus.find_one({"date": today, "published": True})
     menu = DailyMenu.from_mongo(doc)
-    return {"today": today, "menu": menu.model_dump() if menu and menu.items else None}
+    if not menu or not menu.items:
+        return {"today": today, "menu": None}
+    data = menu.model_dump()
+    for i, it in enumerate(data["items"]):
+        it["id"] = daily_item_id(today, i, it["name"], it["price"])
+    return {"today": today, "menu": data}
 
 
 @router.get("/files/{path:path}")

@@ -1,29 +1,46 @@
 import { Link } from "react-router-dom";
-import { AllergenChips } from "./DishCard";
+import { toast } from "sonner";
+import { AddButton, AllergenChips } from "./DishCard";
+import { useCart } from "../../context/CartContext";
 import { ROUTES, T, pick, formatPrice } from "../../lib/i18n";
 
-export const DailyItems = ({ menu, lang, dark = false }) => (
-  <ol className="divide-y divide-current/10" data-testid="daily-menu-items">
-    {menu.items.map((it, i) => (
-      <li key={i} className={`grid grid-cols-[auto_1fr] gap-x-5 py-5 ${dark ? "border-paper/10" : "border-tamarind/10"}`} data-testid={`daily-menu-item-${i}`}>
-        <span className={`pt-1 font-mono text-xs ${dark ? "text-turmeric" : "text-lacquer"}`}>{String(i + 1).padStart(2, "0")}</span>
-        <div>
-          <div className="flex items-baseline gap-3">
-            <h3 className="font-display text-lg sm:text-xl" data-testid={`daily-menu-item-name-${i}`}>{it.name}</h3>
-            <span className={`dotted-leader ${dark ? "!border-paper/25" : ""}`} />
-            <span className={`shrink-0 font-mono text-[15px] ${dark ? "text-turmeric" : "text-lacquer"}`} data-testid={`daily-menu-item-price-${i}`}>{formatPrice(it.price)}</span>
+export const DailyItems = ({ menu, lang, dark = false }) => {
+  const cart = useCart();
+  const canOrder = cart?.ordering?.accepting;
+  const add = (it) => {
+    cart.add(it);
+    toast.success(T[lang].cart.added, { description: it.name, duration: 1800 });
+  };
+  return (
+    <ol className="divide-y divide-current/10" data-testid="daily-menu-items">
+      {menu.items.map((it, i) => (
+        <li key={i} className={`grid grid-cols-[auto_1fr] gap-x-5 py-5 ${dark ? "border-paper/10" : "border-tamarind/10"}`} data-testid={`daily-menu-item-${i}`}>
+          <span className={`pt-1 font-mono text-xs ${dark ? "text-turmeric" : "text-lacquer"}`}>{String(i + 1).padStart(2, "0")}</span>
+          <div>
+            <div className="flex items-baseline gap-3">
+              <h3 className="font-display text-lg sm:text-xl" data-testid={`daily-menu-item-name-${i}`}>{it.name}</h3>
+              <span className={`dotted-leader ${dark ? "!border-paper/25" : ""}`} />
+              <span className={`shrink-0 font-mono text-[15px] ${dark ? "text-turmeric" : "text-lacquer"}`} data-testid={`daily-menu-item-price-${i}`}>{formatPrice(it.price)}</span>
+            </div>
+            {pick(lang, it.desc_cz, it.desc_en) && (
+              <p className={`mt-1.5 text-sm leading-normal ${dark ? "text-paper/70" : "text-tamarind/70"}`}>{pick(lang, it.desc_cz, it.desc_en)}</p>
+            )}
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <span className={dark ? "[&_span]:border-paper/25 [&_span]:text-paper/70" : ""}>
+                <AllergenChips list={it.allergens} testPrefix={`daily-${i}`} />
+              </span>
+              {canOrder && it.id && (
+                <span className="ml-auto">
+                  <AddButton onClick={() => add(it)} label={T[lang].cart.add} testId={`add-daily-${i}`} />
+                </span>
+              )}
+            </div>
           </div>
-          {pick(lang, it.desc_cz, it.desc_en) && (
-            <p className={`mt-1.5 text-sm leading-normal ${dark ? "text-paper/70" : "text-tamarind/70"}`}>{pick(lang, it.desc_cz, it.desc_en)}</p>
-          )}
-          <div className={`mt-2 ${dark ? "[&_span]:border-paper/25 [&_span]:text-paper/70" : ""}`}>
-            <AllergenChips list={it.allergens} testPrefix={`daily-${i}`} />
-          </div>
-        </div>
-      </li>
-    ))}
-  </ol>
-);
+        </li>
+      ))}
+    </ol>
+  );
+};
 
 // `today` is the restaurant's date (YYYY-MM-DD) from the API; the daily menu is weekdays only.
 const isWeekend = (today) => today && [0, 6].includes(new Date(`${today}T00:00:00Z`).getUTCDay());

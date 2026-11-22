@@ -35,7 +35,7 @@ const DietBadges = ({ item, lang }) => (
   </>
 );
 
-const AddButton = ({ onClick, label, testId }) => (
+export const AddButton = ({ onClick, label, testId }) => (
   <button
     type="button"
     onClick={onClick}

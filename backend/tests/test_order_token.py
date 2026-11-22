@@ -52,7 +52,7 @@ def fakes(monkeypatch):
     async def settings():
         return dict(ordering.DEFAULTS)
 
-    async def number(_date):
+    async def number():
         return 999
 
     monkeypatch.setattr(teya_client, "configured", lambda: True)
