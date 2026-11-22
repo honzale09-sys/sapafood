@@ -93,3 +93,6 @@ credentials.json
 *.key
 .credentials
 media_src/0929.mp4
+.env
+.env.*
+*.env
