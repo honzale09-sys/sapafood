@@ -45,6 +45,10 @@ export const Footer = ({ lang }) => {
             <Link to={ROUTES.terms[lang]} className="hover:text-turmeric" data-testid="footer-terms">{t.cart.terms}</Link> ·{" "}
             <Link to={ROUTES.privacy[lang]} className="hover:text-turmeric" data-testid="footer-privacy">{t.cart.privacy}</Link>
           </p>
+          <p data-testid="footer-credit">
+            Made by Hoang Le ·{" "}
+            <a href="https://scaleone.cz" target="_blank" rel="noopener" className="hover:text-turmeric" data-testid="footer-credit-link">scaleone.cz</a>
+          </p>
           <LangSwitch lang={lang} light testPrefix="footer" />
         </div>
       </div>
